@@ -1,5 +1,8 @@
 private var pitch : float = 0.0;
 private var yaw : float = 0.0;
+private var selected : GameObject;
+
+selected = GameObject.Find('galactica');
 
 function OnGUI () {
 	var rect = Rect(20, 20, 150, 170);
@@ -19,13 +22,11 @@ function OnGUI () {
 }
 
 function PlayMoves () {
-  var ship = GameObject.Find('galactica');
-  var ShipController = ship.GetComponent(ShipController);
+  var ShipController = selected.GetComponent(ShipController);
   ShipController.PlayShipMoves();
 }
 
 function Pause () {
-  var ship = GameObject.Find('galactica');
-  ship.rigidbody.constraints = RigidbodyConstraints.FreezeNone;
-  ship.rigidbody.constraints = RigidbodyConstraints.FreezeAll;
+  selected.rigidbody.constraints = RigidbodyConstraints.FreezeNone;
+  selected.rigidbody.constraints = RigidbodyConstraints.FreezeAll;
 }

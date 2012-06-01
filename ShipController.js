@@ -55,7 +55,8 @@ function FixedUpdate ()
 	  }
 	  else {
 	    MoveShip = false;
-	    rigidbody.AddForce(ShipIntersectHit * 10, ForceMode.Impulse);
+	    // rigidbody.AddForce(ShipIntersectHit * 10, ForceMode.Impulse);
+		rigidbody.AddForce(transform.forward * 1000, ForceMode.Impulse);
 	  }
 	}
 }
