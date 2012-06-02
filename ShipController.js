@@ -45,9 +45,9 @@ function FixedUpdate ()
 		ShipIntersectHit = DestIntersect.GetPoint(dist);
 		lookRotation = Quaternion.LookRotation(ShipIntersectHit - transform.position, transform.position.up);
 		//VectorLine.DestroyLine(UILine);
-		linePoints[0] = transform.position;
-		linePoints[1] = ShipIntersectHit;
-		UILine.Draw3DAuto();
+		// linePoints[0] = transform.position;
+		// linePoints[1] = ShipIntersectHit;
+		// UILine.Draw3DAuto();
 	}
 	if(MoveShip) {
 	  if(Quaternion.Angle(transform.rotation, lookRotation) > .1) {
