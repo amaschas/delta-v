@@ -2,6 +2,8 @@ var lineMaterial : Material;
 
 private var pitch : float = 0.0;
 private var yaw : float = 0.0;
+private var prevPitch : float = 0.0;
+private var prevYaw : float = 0.0;
 private var selected : GameObject;
 
 private var HeadingIndicator : VectorLine;
@@ -30,28 +32,30 @@ function OnGUI () {
 	if (GUILayout.Button("Pause", GUILayout.Width(150))) {
 		Pause();
 	}
-	yaw = GUILayout.HorizontalSlider(yaw, -10.0, 10.0);
-	pitch = GUILayout.VerticalSlider(pitch, -10.0, 10.0);
+	yaw = GUILayout.HorizontalSlider(yaw, 0.0, 360.0);
+	pitch = GUILayout.VerticalSlider(pitch, 0.0, 360.0);
 	GUILayout.EndArea();
 }
 
 function FixedUpdate () {
-	// Debug.Log(selected.transform.position);
-	// Debug.Log(selected.transform.forward);
-	if(yaw == 0 && pitch == 0) {
-		linePoints[0] = selected.transform.position;
-		linePoints[1] = selected.transform.forward * 20;
-		HeadingIndicator.Draw3DAuto();
+	var orientation = selected.transform.Find("Orientation");
+		
+	if(yaw != prevYaw) {
+		orientation.transform.RotateAround(orientation.transform.position, selected.transform.right, yaw - prevYaw);
+		prevYaw = yaw;
 	}
-	else {
-		Debug.Log('triggered');
-		var temp = selected.transform;
-		temp.rotation = Quaternion.AngleAxis(30, selected.transform.up);
-		HeadingIndicator.Draw3DAuto(temp);
+	if(pitch != prevPitch) {
+		orientation.transform.RotateAround(orientation.transform.position, selected.transform.up, pitch - prevPitch);
+		prevPitch = pitch;
 	}
+  // linePoints[0] = orientation.transform.position;
+  // linePoints[1] = orientation.transform.forward * 20;
+  // HeadingIndicator.Draw3DAuto();
 }
 
 function PlayMoves () {
+	pitch = 0.0;
+	yaw = 0.0;
   var ShipController = selected.GetComponent(ShipController);
   ShipController.PlayShipMoves();
 }
