@@ -15,6 +15,12 @@ public class Ship : MonoBehaviour {
     void Start() { Init(); }
     void OnEnable() { Init(); }
 
+	public struct ModuleAction {
+		private GameObject module;
+		private float duration;
+		private Vector3 target;
+	}
+
 	public void Init () {
 		//Initialize modules with array of module GameObjects;
 	}
@@ -22,12 +28,6 @@ public class Ship : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	
-	}
-
-	public struct ModuleAction {
-		private GameObject module;
-		private float duration;
-		private Vector3 target;
 	}
 
 	public ModuleAction NextInQueue () {
