@@ -3,6 +3,9 @@ var heatDissipation : int;
 var rotationSpeed : float;
 var lineMaterial : Material;
 
+private var modules : GameObject[];
+private var actionQueue : GameObject[];
+
 private var lookRotation : Quaternion;
 private var velocityVector : VectorLine;
 private var MoveShip : System.Boolean;
@@ -21,17 +24,14 @@ function Start () {
 	velocityVector = VectorLine("Velocity", velocityLinePoints, Color.green, lineMaterial, lineWidth, lineType, joins);
 }
 
-function FixedUpdate ()
-{
-  // Debug.Log(targetSet);
+function FixedUpdate () {
 	if(MoveShip) {
 		if(!targetSet) {
       target = transform.Find("Orientation").GetComponent(OrientationDebug).GetTrueForward();
       lookRotation = Quaternion.LookRotation(target - transform.position, transform.position.up);
       targetSet = true;
     }
-    Debug.Log(target);
-	  if(Quaternion.Angle(transform.rotation, lookRotation) > .5) {
+	  if(Quaternion.Angle(transform.rotation, lookRotation) > .1) {
 	    transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * rotationSpeed);
 	  }
 	  else {
@@ -53,3 +53,5 @@ public function PlayShipMoves () {
 	Debug.Log('Moves Played');
 	MoveShip = true;
 }
+
+// function RotateShip 
