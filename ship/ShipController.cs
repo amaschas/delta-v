@@ -1,13 +1,19 @@
 using UnityEngine;
 using System.Collections;
-
+using System.Collections.Generic;
 
 public class ShipController : MonoBehaviour {
 
 	private Ship ship;
 	private ShipView shipView;
+	public Dictionary<string, ModuleInterface> modules;
+	public Queue<ModuleAction> actionQueue;
+
+	//This should not exist
 	private OrientationController orientationController;
-	private GameObject activeModule;
+
+	// This should be in Ship.cs
+	private ModuleInterface activeModule;
 
     void Start() { Init(); }
     void OnEnable() { Init(); }
@@ -15,13 +21,19 @@ public class ShipController : MonoBehaviour {
 	public void Init () {
 		ship = gameObject.GetComponent<Ship>();
 		shipView = gameObject.GetComponent<ShipView>();
+		modules = ship.modules;
+		actionQueue = ship.actionQueue;
+		// This should probably not exist;
 		orientationController = transform.Find("Orientation").GetComponent<OrientationController>();
 		shipView.enabled = false;
 		ship.runQueue = false;
-		//Initialize modules with array of module GameObjects;
+		
+		foreach (Transform child in transform) if (child.CompareTag("Module")) {
+			ModuleInterface controller = child.gameObject.GetComponent(typeof(ModuleInterface)) as ModuleInterface;
+      ship.modules.Add(child.name, controller);
+    }
 	}
 
-	// Update is called once per frame
 	void FixedUpdate () {
 		if(ship.runQueue) {
 			RunQueue();
@@ -38,22 +50,20 @@ public class ShipController : MonoBehaviour {
 		orientationController.DeactivateView();
 	}
 
-	public void ActivateModule (GameObject module) {
-		if(activeModule) {
-			activeModule.SendMessage("DeactivateView");
+	public void ActivateModule (ModuleInterface module) {
+		if(activeModule != null) {
+			module.DeactivateView();
 		}
-		activeModule = module;
-		module.SendMessage("ActivateView");
+		activeModule = module.ActivateView();
 	}
 
 	public void AddCurrentActionToQueue () {
-		Debug.Log(orientationController.HasAction());
+		// Debug.Log(orientationController.HasAction());
 		if(orientationController.HasAction()) {
-			ship.Enqueue(orientationController.GetAction());
+			ship.actionQueue.Enqueue(orientationController.GetAction());
 		}
-		ModuleActions activeModuleActions = activeModule.GetComponent(typeof(ModuleActions)) as ModuleActions;
-		if(activeModuleActions.HasAction()) {
-			ship.Enqueue(activeModuleActions.GetAction());
+		if(activeModule.HasAction()) {
+			ship.actionQueue.Enqueue(activeModule.GetAction());
 		}
 	}
 
@@ -61,9 +71,8 @@ public class ShipController : MonoBehaviour {
 		if(ship.actionQueue.Count > 0) {
 			ship.runQueue = true;
 			ModuleAction action = ship.actionQueue.Peek();
-			action.module.SendMessage("DoAction", action);
-			ModuleActions module = action.module.GetComponent(typeof(ModuleActions)) as ModuleActions;
-			if(!module.IsRunning()) {
+			action.DoAction();
+			if(!ship.modules[action.module.Name()].IsRunning()) {
 				ship.actionQueue.Dequeue();
 			}
 		}

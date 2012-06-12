@@ -44,7 +44,7 @@ public class OrientationView : MonoBehaviour {
 
   void DrawHeadingIndicator () {
     linePoints[0] = transform.position;
-    linePoints[1] = orientationController.orientation.GetTrueForward() * 3;
+    linePoints[1] = orientationController.orientation.GetTrueForward();
     headingIndicator.Draw();
   }
 }

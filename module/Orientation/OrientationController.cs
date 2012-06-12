@@ -1,16 +1,19 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
-public class OrientationController : MonoBehaviour, ModuleActions {
+public class OrientationController : MonoBehaviour, ModuleInterface {
 
   public Orientation orientation;
   private OrientationView orientationView;
+  // This should maybe be in the model, but it's a giant fuck to put it there
+  public Dictionary <string, ModuleInterface> shipModules;
   private float orientationYaw = 0.0f;
   private float orientationPitch = 0.0f;
-
   private Quaternion lookRotation;
 
 	void Start () {
+    shipModules = transform.parent.gameObject.GetComponent<ShipController>().modules;
     orientation = gameObject.GetComponent<Orientation>();
     orientationView = gameObject.GetComponent<OrientationView>();
     orientation.durationModifier = transform.parent.gameObject.GetComponent<Ship>().rotationRate;
@@ -18,8 +21,13 @@ public class OrientationController : MonoBehaviour, ModuleActions {
     orientation.isRunning = false;
 	}
 
-  public void ActivateView () {
+  public string Name () {
+    return transform.name;
+  }
+
+  public ModuleInterface ActivateView () {
     orientationView.enabled = true;
+    return this;
   }
 
   public void DeactivateView () {
@@ -34,7 +42,7 @@ public class OrientationController : MonoBehaviour, ModuleActions {
   }
 
   public ModuleAction GetAction () {
-    ModuleAction action = new ModuleAction(gameObject, orientation.target, GetDuration());
+    ModuleAction action = new ModuleAction(this, orientation.target, GetDuration());
     orientation.target = Vector3.zero;
     return action;
   }
@@ -50,7 +58,7 @@ public class OrientationController : MonoBehaviour, ModuleActions {
     }
   }
 
-  public void DoAction (ModuleAction action) {
+  public void Run (ModuleAction action) {
     if(!orientation.isRunning) {
       orientation.isRunning = true;
       lookRotation = Quaternion.LookRotation(action.target - transform.parent.position, transform.parent.up);

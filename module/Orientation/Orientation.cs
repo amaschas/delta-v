@@ -7,12 +7,8 @@ public class Orientation : Module {
   public float deltaPitch = 0.0f;
   public Vector3 target;
   public bool isRunning;
-
-	// Use this for initialization
-	void Start () {
-	}
 	
-	// Update is called once per frame
+  // This needs to move to the controller
 	void FixedUpdate () {
     if (deltaYaw != 0.0f) {
       transform.RotateAround(transform.position, transform.parent.up, deltaYaw);

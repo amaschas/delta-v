@@ -1,13 +1,15 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
-public class EngineController : MonoBehaviour, ModuleActions {
+public class EngineController : MonoBehaviour, ModuleInterface {
 
   private Engine engine;
   private EngineView engineView;
+  public Dictionary <string, ModuleInterface> shipModules;
 
-	// Use this for initialization
 	void Start () {
+    shipModules = transform.parent.gameObject.GetComponent<ShipController>().modules;
     engineView = gameObject.GetComponent<EngineView>();
     engine = gameObject.GetComponent<Engine>();
     engineView.enabled = false;
@@ -15,14 +17,13 @@ public class EngineController : MonoBehaviour, ModuleActions {
     engine.isRunning = false;
 	}
 
-  void Update () {
-    // if(engine.thrustDuration > 0) {
-    //   Debug.Log(engine.thrustDuration);
-    // }
+  public string Name () {
+    return transform.name;
   }
 
-  public void ActivateView () {
+  public ModuleInterface ActivateView () {
     engineView.enabled = true;
+    return this;
   }
 
   public void DeactivateView () {
@@ -37,12 +38,12 @@ public class EngineController : MonoBehaviour, ModuleActions {
   }
   
   public ModuleAction GetAction () {
-    ModuleAction action = new ModuleAction(gameObject, Vector3.zero, engine.thrustDuration);
+    ModuleAction action = new ModuleAction(this, Vector3.zero, engine.thrustDuration);
     engine.thrustDuration = 0;
     return action;
   }
   
-  public void DoAction (ModuleAction action) {
+  public void Run (ModuleAction action) {
     if(!engine.isRunning) {
       engine.isRunning = true;
       engine.thrustDuration = action.duration;
