@@ -1,7 +1,8 @@
 #pragma strict
 
+var type = 'Engine';
+var thrust : int;
 var heat : int;
-var duration : int;
 var actionWidth : int;
 
 function Start () {

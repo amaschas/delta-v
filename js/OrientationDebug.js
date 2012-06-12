@@ -1,5 +1,6 @@
 #pragma strict
 
+var type = 'OrientationControl';
 var debug : System.Boolean = false;
 var lineMaterial : Material;
 private var debugLine : VectorLine;

@@ -8,13 +8,17 @@ private var selected : GameObject;
 private var HeadingIndicator : VectorLine;
 private var linePoints : Vector3[];
 
+// private var gameController : GameController;
+
 selected = GameObject.Find('galactica');
 
 function Start () {
+	// gameController = GameObject.Find('GameController').GetComponent(GameController);
+	
 	var lineWidth = 5.0;
 	var lineType = LineType.Discrete;
 	var joins = Joins.None;
-	linePoints = new Vector3[500];
+	// linePoints = new Vector3[500];
 	linePoints[0] = Vector3.one;
 	HeadingIndicator = VectorLine("headingLine", linePoints, Color.white, lineMaterial, lineWidth, lineType, joins);
   // var widths = [2.0, 6.0];
