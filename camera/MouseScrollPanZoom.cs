@@ -8,11 +8,12 @@
 using UnityEngine;
 using System.Collections;
 
-public class MaxCamera : MonoBehaviour
+
+public class MouseScrollPanZoom : MonoBehaviour
 {
     public Transform target;
     public Vector3 targetOffset;
-    public float distance = 5.0f;
+    public float distance = 10.0f;
     public float maxDistance = 20;
     public float minDistance = .6f;
     public float xSpeed = 200.0f;
@@ -23,14 +24,23 @@ public class MaxCamera : MonoBehaviour
     public float panSpeed = 0.3f;
     public float zoomDampening = 5.0f;
 
-    private float xDeg = 0.0f;
-    private float yDeg = 0.0f;
+    private float x = 0.0f;
+    private float y = 0.0f;
+    private float xDegPrev = 0.0f;
+    private float yDegPrev = 0.0f;
+    // private float panSensitivity = 5.0f;
+
     private float currentDistance;
     private float desiredDistance;
     private Quaternion currentRotation;
     private Quaternion desiredRotation;
     private Quaternion rotation;
     private Vector3 position;
+
+    private float scrollLeft = 120.0f;
+    private float scrollRight = 120.0f;
+    private float scrollUp = 120.0f;
+    private float scrollDown = 120.0f;
 
     void Start() { Init(); }
     void OnEnable() { Init(); }
@@ -55,8 +65,15 @@ public class MaxCamera : MonoBehaviour
         currentRotation = transform.rotation;
         desiredRotation = transform.rotation;
         
-        xDeg = Vector3.Angle(Vector3.right, transform.right );
-        yDeg = Vector3.Angle(Vector3.up, transform.up );
+        // xDeg = Vector3.Angle(Vector3.right, transform.right );
+        // yDeg = Vector3.Angle(Vector3.up, transform.up );
+        Vector3 angles = transform.eulerAngles;
+        x = angles.y;
+        y = angles.x;
+
+        // Make the rigid body not change rotation
+        if (rigidbody) 
+            rigidbody.freezeRotation = true;
     }
 
     /*
@@ -72,27 +89,25 @@ public class MaxCamera : MonoBehaviour
         // If middle mouse and left alt are selected? ORBIT
         else if (Input.GetMouseButton(0) && Input.GetKey(KeyCode.LeftAlt))
         {
-            xDeg += Input.GetAxis("Mouse X") * xSpeed * 0.02f;
-            yDeg -= Input.GetAxis("Mouse Y") * ySpeed * 0.02f;
+            x += Input.GetAxis("Mouse X") * xSpeed * Time.deltaTime;
+            y -= Input.GetAxis("Mouse Y") * ySpeed * Time.deltaTime;
 
-            ////////OrbitAngle
+            y = ClampAngle(y, yMinLimit, yMaxLimit);
 
-            //Clamp the vertical axis for the orbit
-            yDeg = ClampAngle(yDeg, yMinLimit, yMaxLimit);
-            // set camera rotation 
-            desiredRotation = Quaternion.Euler(yDeg, xDeg, 0);
-            currentRotation = transform.rotation;
-            
-            rotation = Quaternion.Lerp(currentRotation, desiredRotation, Time.deltaTime * zoomDampening);
-            transform.rotation = rotation;
+            transform.rotation = Quaternion.Euler(y, x, 0);
+            transform.position = (Quaternion.Euler(y, x, 0)) * new Vector3(0.0f, 0.0f, -distance) + target.position;
         }
         // otherwise if middle mouse is selected, we pan by way of transforming the target in screenspace
-        else if (Input.GetMouseButton(3))
+        else if (Input.GetMouseButton(0))
         {
-            //grab the rotation of the camera so we can move in a psuedo local XY space
-            target.rotation = transform.rotation;
-            target.Translate(Vector3.right * -Input.GetAxis("Mouse X") * panSpeed);
-            target.Translate(transform.up * -Input.GetAxis("Mouse Y") * panSpeed, Space.World);
+            float mousePosX = Input.mousePosition.x;
+            float mousePosY = Input.mousePosition.y;
+            if(mousePosX > scrollLeft && mousePosX < Screen.width - scrollRight && mousePosY > scrollUp && mousePosY < Screen.height - scrollDown) {
+              //grab the rotation of the camera so we can move in a psuedo local XY space
+              target.rotation = transform.rotation;
+              target.Translate(Vector3.right * -Input.GetAxis("Mouse X") * panSpeed);
+              target.Translate(transform.up * -Input.GetAxis("Mouse Y") * panSpeed, Space.World);
+            }
         }
 
         ////////Orbit Position

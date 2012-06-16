@@ -10,13 +10,11 @@ public class OrientationController : MonoBehaviour, ModuleInterface {
   public Dictionary <string, ModuleInterface> shipModules;
   private float orientationYaw = 0.0f;
   private float orientationPitch = 0.0f;
-  private Quaternion lookRotation;
 
 	void Start () {
     shipModules = transform.parent.gameObject.GetComponent<ShipController>().modules;
     orientation = gameObject.GetComponent<Orientation>();
     orientationView = gameObject.GetComponent<OrientationView>();
-    orientation.durationModifier = transform.parent.gameObject.GetComponent<Ship>().rotationRate;
     orientationView.enabled = false;
     orientation.isRunning = false;
 	}
@@ -27,10 +25,12 @@ public class OrientationController : MonoBehaviour, ModuleInterface {
 
   public ModuleInterface ActivateView () {
     orientationView.enabled = true;
+    orientationView.headingIndicator.active = true;
     return this;
   }
 
   public void DeactivateView () {
+    orientationView.headingIndicator.active = false;
     orientationView.enabled = false;
   }
 
@@ -42,7 +42,9 @@ public class OrientationController : MonoBehaviour, ModuleInterface {
   }
 
   public ModuleAction GetAction () {
-    ModuleAction action = new ModuleAction(this, orientation.target, GetDuration());
+    // Quaternion lookRotation = Quaternion.LookRotation(orientation.target - transform.parent.position, transform.parent.up);
+    Quaternion rotation = transform.rotation;
+    ModuleAction action = new ModuleAction(this, rotation, GetDuration());
     orientation.target = Vector3.zero;
     return action;
   }
@@ -61,10 +63,9 @@ public class OrientationController : MonoBehaviour, ModuleInterface {
   public void Run (ModuleAction action) {
     if(!orientation.isRunning) {
       orientation.isRunning = true;
-      lookRotation = Quaternion.LookRotation(action.target - transform.parent.position, transform.parent.up);
     }
-    if(Quaternion.Angle(transform.parent.rotation, lookRotation) > .1) {
-      transform.parent.gameObject.GetComponent<ShipController>().Reorient(lookRotation);
+    if(Quaternion.Angle(transform.parent.rotation, action.rotationTarget) > .1) {
+      transform.parent.gameObject.GetComponent<ShipController>().Reorient(action.rotationTarget, orientation.durationModifier);
     }
     else {
       orientation.isRunning = false;
@@ -80,6 +81,7 @@ public class OrientationController : MonoBehaviour, ModuleInterface {
     float duration;
     if(orientation.durationModifier != 0.0f) {
       duration = Quaternion.Angle(transform.parent.rotation, transform.rotation) / orientation.durationModifier;
+      Debug.Log(duration);
     }
     else {
       duration = Quaternion.Angle(transform.parent.rotation, transform.rotation);

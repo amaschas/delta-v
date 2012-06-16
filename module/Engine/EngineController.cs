@@ -31,10 +31,10 @@ public class EngineController : MonoBehaviour, ModuleInterface {
   }
 
   public bool HasAction () {
-    // if(engine.thrustDuration > 0) {
+    if(engine.thrustDuration > 0) {
       return true;
-    // }
-    // else return false;
+    }
+    else return false;
   }
   
   public ModuleAction GetAction () {
@@ -52,8 +52,8 @@ public class EngineController : MonoBehaviour, ModuleInterface {
       engine.isRunning = false;
     }
     transform.parent.gameObject.GetComponent<ShipController>().AddThrust(engine.thrust);
-    Debug.Log(engine.thrustDuration);
-    Debug.Log(Time.deltaTime);
+    // Debug.Log(engine.thrustDuration);
+    // Debug.Log(Time.deltaTime);
     engine.thrustDuration -= Time.deltaTime;
   }
   

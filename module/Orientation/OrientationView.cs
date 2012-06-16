@@ -3,12 +3,12 @@ using System.Collections;
 
 public class OrientationView : MonoBehaviour {
 
+  public VectorLine headingIndicator;
   public Material lineMaterial;
 
   private OrientationController orientationController;
   private float pitch = 0.0f;
   private float yaw = 0.0f;
-  private VectorLine headingIndicator;
   private Vector3[] linePoints = new Vector3[500];
 
   private GameObject sphere;
@@ -16,7 +16,7 @@ public class OrientationView : MonoBehaviour {
 	void Start () {
     orientationController = gameObject.GetComponent<OrientationController>();
     Color lineColor = Color.white;
-    float lineWidth = 2.0f;
+    float lineWidth = 4.0f;
     float capLength = 0.0f;
     int lineDepth = 0;
     LineType lineType = LineType.Discrete;
@@ -24,7 +24,7 @@ public class OrientationView : MonoBehaviour {
     linePoints[0] = Vector3.zero;
     // headingIndicator = new VectorLine("headingLine", linePoints, Color.white, lineMaterial, lineWidth, lineType, joins);
     VectorLine.SetLineParameters(lineColor, lineMaterial, lineWidth, capLength, lineDepth, lineType, joins);
-    headingIndicator = VectorLine.MakeLine ("headingLine", linePoints);
+    headingIndicator = VectorLine.MakeLine (transform.parent.name + "headingLine", linePoints);
 
     // sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
 	}

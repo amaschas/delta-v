@@ -35,8 +35,5 @@ public class ShipView : MonoBehaviour {
     if(GUI.Button(new Rect(Screen.width - 105, Screen.height - 50, 100, 20), "Queue Action")) {
       shipController.AddCurrentActionToQueue();
     }
-    if(GUI.Button(new Rect(Screen.width - 105, Screen.height - 25, 100, 20), "Play Actions")) {
-      shipController.RunQueue();
-    }
   }
 }

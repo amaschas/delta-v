@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class ShipController : MonoBehaviour {
+public class ShipController : MonoBehaviour, ShipInterface {
 
 	private Ship ship;
 	private ShipView shipView;
@@ -13,12 +13,13 @@ public class ShipController : MonoBehaviour {
 	private OrientationController orientationController;
 
 	// This should be in Ship.cs
-	private ModuleInterface activeModule;
+	private ModuleInterface activeModule = null;
 
-    void Start() { Init(); }
-    void OnEnable() { Init(); }
+    // void Start() { Init(); }
+    // void OnEnable() { Init(); }
 
-	public void Init () {
+	public void Start () {
+		Debug.Log("Initializing " + transform.name);
 		ship = gameObject.GetComponent<Ship>();
 		shipView = gameObject.GetComponent<ShipView>();
 		modules = ship.modules;
@@ -27,15 +28,19 @@ public class ShipController : MonoBehaviour {
 		orientationController = transform.Find("Orientation").GetComponent<OrientationController>();
 		shipView.enabled = false;
 		ship.runQueue = false;
-		
 		foreach (Transform child in transform) if (child.CompareTag("Module")) {
+			Debug.Log("Adding " + child.name);
 			ModuleInterface controller = child.gameObject.GetComponent(typeof(ModuleInterface)) as ModuleInterface;
       ship.modules.Add(child.name, controller);
     }
 	}
 
+	public string Name () {
+		return transform.name;
+	}
+
 	void FixedUpdate () {
-		if(ship.runQueue) {
+		if(ship.runQueue && GameObject.Find("GameController").GetComponent<GameController>().turnPlaying) {
 			RunQueue();
 		}
 	}
@@ -48,6 +53,9 @@ public class ShipController : MonoBehaviour {
 	public void Deselect () {
 		shipView.enabled = false;
 		orientationController.DeactivateView();
+		if(activeModule != null) {
+			activeModule.DeactivateView();
+		}
 	}
 
 	public void ActivateModule (ModuleInterface module) {
@@ -62,7 +70,7 @@ public class ShipController : MonoBehaviour {
 		if(orientationController.HasAction()) {
 			ship.actionQueue.Enqueue(orientationController.GetAction());
 		}
-		if(activeModule.HasAction()) {
+		if(activeModule != null && activeModule.HasAction()) {
 			ship.actionQueue.Enqueue(activeModule.GetAction());
 		}
 	}
@@ -81,12 +89,20 @@ public class ShipController : MonoBehaviour {
 		}
 	}
 
-	public void Reorient (Quaternion lookRotation) {
+	public void Reorient (Quaternion rotation, float rate) {
 		// Debug.Log(Quaternion.Angle(transform.rotation, lookRotation));
-		transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * ship.rotationRate);
+		transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, Time.deltaTime * rate);
 	}
 
 	public void AddThrust (int thrust) {
 		rigidbody.AddForce(transform.forward * thrust, ForceMode.Impulse);
+	}
+
+	public Vector3 GetVelocity () {
+		return transform.position + rigidbody.velocity * 10;
+	}
+
+	public Vector3 GetTransformPosition () {
+		return transform.position;
 	}
 }
