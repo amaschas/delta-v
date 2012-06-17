@@ -80,7 +80,7 @@ public class ShipController : MonoBehaviour, ShipInterface {
 			ship.runQueue = true;
 			ModuleAction action = ship.actionQueue.Peek();
 			action.DoAction();
-			if(!ship.modules[action.module.Name()].IsRunning()) {
+			if(!ship.modules[action.module.name].IsRunning()) {
 				ship.actionQueue.Dequeue();
 			}
 		}

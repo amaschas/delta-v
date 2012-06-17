@@ -19,8 +19,8 @@ public class OrientationController : MonoBehaviour, ModuleInterface {
     orientation.isRunning = false;
 	}
 
-  public string Name () {
-    return transform.name;
+  public string name {
+    get { return transform.name; }
   }
 
   public ModuleInterface ActivateView () {

@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 public interface ModuleInterface {
-  string Name ();
+  string name { get; }
   ModuleInterface ActivateView ();
   void DeactivateView ();
   bool HasAction ();

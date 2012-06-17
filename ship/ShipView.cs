@@ -25,10 +25,10 @@ public class ShipView : MonoBehaviour {
     distanceFromTop = 30;
     GUI.Box (new Rect (5,5,100,400), "Actions");
     foreach (ModuleAction action in shipController.actionQueue) {
-      // Debug.Log(action.duration);
+      // Debug.Log(action.module.name);
       int actionDuration = (int) action.duration;
-      if(GUI.Button(new Rect(15,distanceFromTop, 80, actionDuration * 10), action.module.Name())) {
-        Debug.Log(action.module.Name());
+      if(GUI.Button(new Rect(15,distanceFromTop, 80, actionDuration * 10), action.module.name)) {
+        Debug.Log(action.module.name);
       }
       distanceFromTop += actionDuration * 10 + 5;
     }
