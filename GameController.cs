@@ -29,7 +29,7 @@ public class GameController : MonoBehaviour {
     }
     selected = UISelected.GetComponent<ShipController>();
 		selected.Select();
-    Camera.main.GetComponent<MaxCamera>().target = selected.transform;
+    Camera.main.GetComponent<MouseScrollPanZoom>().target = UISelected.transform;
 	}
 
 }

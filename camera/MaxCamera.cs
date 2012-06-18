@@ -37,7 +37,7 @@ public class MaxCamera : MonoBehaviour
 
     public void Init()
     {
-        //If there is no target, create a temporary target at 'distance' from the cameras current viewpoint
+        // If there is no target, create a temporary target at 'distance' from the cameras current viewpoint
         if (!target)
         {
             GameObject go = new GameObject("Cam Target");
@@ -118,5 +118,9 @@ public class MaxCamera : MonoBehaviour
         if (angle > 360)
             angle -= 360;
         return Mathf.Clamp(angle, min, max);
+    }
+
+    public float GetZoomFactor () {
+        return currentDistance;
     }
 }

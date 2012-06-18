@@ -12,17 +12,17 @@ public class Orientation : Module {
 	void FixedUpdate () {
     if (deltaYaw != 0.0f) {
       transform.RotateAround(transform.position, transform.parent.up, deltaYaw);
-      target = GetTrueForward();
+      target = GetTrueForward(20);
       deltaYaw = 0.0f;
     }
     if (deltaPitch != 0.0f) {
       transform.RotateAround(transform.position, transform.parent.right, deltaPitch);
-      target = GetTrueForward();
+      target = GetTrueForward(20);
       deltaPitch = 0.0f;
     }
 	}
 
-  public Vector3 GetTrueForward () {
-    return transform.position + transform.forward * 20;
+  public Vector3 GetTrueForward (int zoomFactor) {
+    return transform.position + transform.forward * zoomFactor;
   }
 }

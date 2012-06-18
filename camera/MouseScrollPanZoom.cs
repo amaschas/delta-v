@@ -94,8 +94,11 @@ public class MouseScrollPanZoom : MonoBehaviour
 
             y = ClampAngle(y, yMinLimit, yMaxLimit);
 
-            transform.rotation = Quaternion.Euler(y, x, 0);
-            transform.position = (Quaternion.Euler(y, x, 0)) * new Vector3(0.0f, 0.0f, -distance) + target.position;
+            rotation = Quaternion.Euler(y, x, 0);
+            position = rotation * new Vector3(0.0f, 0.0f, -distance) + target.position;
+
+            transform.rotation = rotation;
+            transform.position = position;
         }
         // otherwise if middle mouse is selected, we pan by way of transforming the target in screenspace
         else if (Input.GetMouseButton(0))
@@ -120,8 +123,8 @@ public class MouseScrollPanZoom : MonoBehaviour
         currentDistance = Mathf.Lerp(currentDistance, desiredDistance, Time.deltaTime * zoomDampening);
 
         // calculate position based on the new currentDistance 
-        position = target.position - (rotation * Vector3.forward * currentDistance + targetOffset);
-        transform.position = position;
+        Vector3 newPosition = target.position - (rotation * Vector3.forward * currentDistance + targetOffset);
+        transform.position = newPosition;
 
         Debug.DrawLine(transform.position, target.position, Color.red);
     }
@@ -133,5 +136,9 @@ public class MouseScrollPanZoom : MonoBehaviour
         if (angle > 360)
             angle -= 360;
         return Mathf.Clamp(angle, min, max);
+    }
+
+    public float GetZoomFactor () {
+        return currentDistance;
     }
 }
