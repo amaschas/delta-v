@@ -92,7 +92,7 @@ public class MouseScrollPanZoom : MonoBehaviour
             x += Input.GetAxis("Mouse X") * xSpeed * Time.deltaTime;
             y -= Input.GetAxis("Mouse Y") * ySpeed * Time.deltaTime;
 
-            y = ClampAngle(y, yMinLimit, yMaxLimit);
+            // y = ClampAngle(y, yMinLimit, yMaxLimit);
 
             rotation = Quaternion.Euler(y, x, 0);
             position = rotation * new Vector3(0.0f, 0.0f, -distance) + target.position;

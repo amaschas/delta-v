@@ -6,7 +6,6 @@ public class ShipView : MonoBehaviour {
 
   private ShipController shipController;
   public Queue<ModuleAction> actionQueueViewList;
-  public MeshInterface mesh;
 
 	void Start () {
     shipController = GetComponent<ShipController>();

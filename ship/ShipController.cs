@@ -9,7 +9,7 @@ public class ShipController : MonoBehaviour, ShipInterface {
 	public Dictionary<string, ModuleInterface> modules;
 	public Queue<ModuleAction> actionQueue;
 
-	public MeshInterface mesh;
+	// public MeshInterface mesh;
 
 	//This should not exist
 	private OrientationController orientationController;
@@ -36,10 +36,10 @@ public class ShipController : MonoBehaviour, ShipInterface {
       ship.modules.Add(child.name, controller);
     }
 
-    foreach (Transform child in transform) if (child.name == "ShipMesh") {
-      Debug.Log("Testing " + child.name);
-      mesh = child.gameObject.GetComponent(typeof(MeshInterface)) as MeshInterface;
-    }
+    // foreach (Transform child in transform) if (child.name == "ShipMesh") {
+    //   Debug.Log("Testing " + child.name);
+    //   mesh = child.gameObject.GetComponent(typeof(MeshInterface)) as MeshInterface;
+    // }
 	}
 
 	public string Name () {
