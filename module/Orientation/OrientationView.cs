@@ -13,7 +13,18 @@ public class OrientationView : MonoBehaviour {
   private float yaw = 0.0f;
   private Vector3[] linePoints = new Vector3[500];
   private Vector3[] gridPoints = new Vector3[1000];
+  // Camera.main should update this via event
   private float cameraDistance;
+
+  // *******************
+  // private class ModuleStateChangeListener {
+  //Might not need a class here, because the event delegate holds a function
+    public void ModuleStateChangeListener(object o, EventArgs e) {
+      Debug.Log("Orientation Changed");
+      DrawHeadingIndicator(e.orientationPosition, e.orientationForward);
+    }
+  // }
+  // *******************
 
 	void Start () {
     orientationController = gameObject.GetComponent<OrientationController>();
@@ -28,6 +39,13 @@ public class OrientationView : MonoBehaviour {
     VectorLine.SetLineParameters(lineColor, lineMaterial, lineWidth, capLength, lineDepth, lineType, joins);
     headingIndicator = VectorLine.MakeLine (transform.parent.name + "HeadingLine", linePoints);
     orientationGridLine = VectorLine.MakeLine (transform.parent.name + "OrientationGrid", gridPoints);
+
+    // So presumably, this subscribes OrientationView's listener method to Orientation's state change event
+    // *******************
+    // Not using a class to hold the listener
+    // ModuleStateChangeListener mscl = new ModuleStateChangeListener();
+    transform.GetComponent<Orientation>().StateChange += ModuleStateChangeListener;
+    // *******************
 	}
 
 	void LateUpdate () {
@@ -42,15 +60,17 @@ public class OrientationView : MonoBehaviour {
     orientationController.SetOrientation(yaw, pitch);
   }
 
-  void DrawHeadingIndicator () {
-    linePoints[0] = transform.position;
+  // DrawHeadingIndicator should be a response to an OrientationChange Event in Orientation
+  // Camera zoom changes should also message the Selected Ship and the GameController
+  void DrawHeadingIndicator (Vector3 orientationPosition, Vector3 orientationForward) {
+    linePoints[0] = orientationPosition;
     if(GetDistanceToCamera() > 500) {
     //   headingIndicator.Draw();
-      linePoints[1] = orientationController.orientation.GetTrueForward(200);
+      linePoints[1] = orientationPosition + orientationForward * 200;
     }
     else {
     //   headingIndicator.Draw3D();
-      linePoints[1] = orientationController.orientation.GetTrueForward(20);
+      linePoints[1] = orientationPosition + orientationForward * 200;
     }
     headingIndicator.Draw();
   }
