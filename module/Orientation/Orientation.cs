@@ -11,14 +11,14 @@ public class Orientation : Module {
 
     // New Messaging stuff
     // *******************
-    public delegate void ModuleStateChangeHandler(object sender, ModuleStateChangeArgs e);
+    public delegate void ModuleStateChangeHandler(GameObject e);
     public event ModuleStateChangeHandler StateChange;
 
     // protected virtual void OnStateChange(EventArgs e) {
     // Lets not get too fancy here
-    void OnStateChange(ModuleStateChangeArgs e) {
+    void OnStateChange() {
       if(StateChange != null)
-        StateChange(this, e);
+        StateChange(this.gameObject);
     }
     // *******************
 
@@ -32,14 +32,14 @@ public class Orientation : Module {
       target = GetTrueForward(20);
       deltaYaw = 0.0f;
 
-      OnStateChange(new ModuleStateChangeArgs(transform.position, transform.forward));
+      OnStateChange();
     }
     if (deltaPitch != 0.0f) {
       transform.RotateAround(transform.position, transform.parent.right, deltaPitch);
       target = GetTrueForward(20);
       deltaPitch = 0.0f;
 
-      OnStateChange(new ModuleStateChangeArgs(transform.position, transform.forward));
+      OnStateChange();
     }
 	}
 
