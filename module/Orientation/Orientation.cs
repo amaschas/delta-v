@@ -11,26 +11,20 @@ public class Orientation : Module {
 
     // New Messaging stuff
     // *******************
-    public delegate void ModuleStateChangeHandler(object sender, EventArgs e);
+    public delegate void ModuleStateChangeHandler(object sender, ModuleStateChangeArgs e);
     public event ModuleStateChangeHandler StateChange;
 
     // protected virtual void OnStateChange(EventArgs e) {
     // Lets not get too fancy here
-    void OnStateChange(EventArgs e) {
+    void OnStateChange(ModuleStateChangeArgs e) {
       if(StateChange != null)
         StateChange(this, e);
     }
-
-    public class ModuleStateChangeArgs : EventArgs {
-      Vector3 orientationPosition;
-      Vector3 orientationForward;
-
-      public ModuleStateChangeArgs(Vector3 orientationPosition, Vector3 orientationForward) {
-        orientationPosition = orientationPosition;
-        orientationForward = orientationForward;
-      }
-    }
     // *******************
+
+  void Start () {
+    // OnStateChange(new ModuleStateChangeArgs(transform.position, transform.forward));
+  }
 
 	void FixedUpdate () {
     if (deltaYaw != 0.0f) {

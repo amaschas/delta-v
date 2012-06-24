@@ -19,14 +19,18 @@ public class OrientationView : MonoBehaviour {
   // *******************
   // private class ModuleStateChangeListener {
   //Might not need a class here, because the event delegate holds a function
-    public void ModuleStateChangeListener(object o, EventArgs e) {
+    public void ModuleStateChangeListener(object o, ModuleStateChangeArgs e) {
       Debug.Log("Orientation Changed");
+      Debug.Log(e.orientationPosition);
+      Debug.Log(e.orientationForward);
       DrawHeadingIndicator(e.orientationPosition, e.orientationForward);
     }
   // }
   // *******************
 
 	void Start () {
+    transform.GetComponent<Orientation>().StateChange += ModuleStateChangeListener;
+
     orientationController = gameObject.GetComponent<OrientationController>();
     Color lineColor = Color.white;
     float lineWidth = 2.0f;
@@ -39,18 +43,11 @@ public class OrientationView : MonoBehaviour {
     VectorLine.SetLineParameters(lineColor, lineMaterial, lineWidth, capLength, lineDepth, lineType, joins);
     headingIndicator = VectorLine.MakeLine (transform.parent.name + "HeadingLine", linePoints);
     orientationGridLine = VectorLine.MakeLine (transform.parent.name + "OrientationGrid", gridPoints);
-
-    // So presumably, this subscribes OrientationView's listener method to Orientation's state change event
-    // *******************
-    // Not using a class to hold the listener
-    // ModuleStateChangeListener mscl = new ModuleStateChangeListener();
-    transform.GetComponent<Orientation>().StateChange += ModuleStateChangeListener;
-    // *******************
 	}
 
 	void LateUpdate () {
     // Debug.Log(GetDistanceToCamera());
-    DrawHeadingIndicator();
+    // DrawHeadingIndicator();
     DrawHeadingGrid();
 	}
 
