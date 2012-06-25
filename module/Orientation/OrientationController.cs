@@ -8,8 +8,8 @@ public class OrientationController : MonoBehaviour, ModuleInterface {
   private OrientationView orientationView;
   // This should maybe be in the model, but it's a giant fuck to put it there
   public Dictionary <string, ModuleInterface> shipModules;
-  private float orientationYaw = 0.0f;
-  private float orientationPitch = 0.0f;
+  private float prevYaw = 0.0f;
+  private float prevPitch = 0.0f;
 
 	void Start () {
     shipModules = transform.parent.gameObject.GetComponent<ShipController>().modules;
@@ -45,19 +45,20 @@ public class OrientationController : MonoBehaviour, ModuleInterface {
     // Quaternion lookRotation = Quaternion.LookRotation(orientation.target - transform.parent.position, transform.parent.up);
     Quaternion rotation = transform.rotation;
     ModuleAction action = new ModuleAction(this, rotation, GetDuration());
-    orientation.target = Vector3.zero;
+    // orientation.target = Vector3.zero;
     return action;
   }
 
   public void SetOrientation (float yaw, float pitch) {
-    if(yaw != orientationYaw) {
-      orientation.deltaYaw = yaw - orientationYaw;
-      orientationYaw = yaw;
-    }
-    if(pitch != orientationPitch) {
-      orientation.deltaPitch = pitch - orientationPitch;
-      orientationPitch = pitch;
-    }
+    // if(yaw != orientationYaw) {
+    //   orientation.deltaYaw = yaw - orientationYaw;
+    //   orientationYaw = yaw;
+    // }
+    // if(pitch != orientationPitch) {
+    //   orientation.deltaPitch = pitch - orientationPitch;
+    //   orientationPitch = pitch;
+    // }
+    orientation.ChangeOrientation(yaw, pitch);
   }
 
   public void Run (ModuleAction action) {

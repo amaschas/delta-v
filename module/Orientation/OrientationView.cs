@@ -19,21 +19,21 @@ public class OrientationView : MonoBehaviour {
   // *******************
   // private class ModuleStateChangeListener {
   //Might not need a class here, because the event delegate holds a function
-    public void ModuleStateChangeListener(object o, ModuleStateChangeArgs e) {
+    public void ModuleStateChangeListener(GameObject e) {
       Debug.Log("Orientation Changed");
-      Debug.Log(e.orientationPosition);
-      Debug.Log(e.orientationForward);
-      DrawHeadingIndicator(e.orientationPosition, e.orientationForward);
+      Debug.Log(e.name);
+      DrawHeadingIndicator(e.transform.position, e.transform.forward);
+      // DrawHeadingGrid(e.transform.parent);
+      DrawHeadingGrid(e.transform);
     }
   // }
   // *******************
 
 	void Start () {
     transform.GetComponent<Orientation>().StateChange += ModuleStateChangeListener;
-
     orientationController = gameObject.GetComponent<OrientationController>();
     Color lineColor = Color.white;
-    float lineWidth = 2.0f;
+    float lineWidth = 1.0f;
     float capLength = 0.0f;
     int lineDepth = 0;
     LineType lineType = LineType.Discrete;
@@ -41,14 +41,14 @@ public class OrientationView : MonoBehaviour {
     linePoints[0] = Vector3.zero;
     gridPoints[0] = Vector3.zero;
     VectorLine.SetLineParameters(lineColor, lineMaterial, lineWidth, capLength, lineDepth, lineType, joins);
-    headingIndicator = VectorLine.MakeLine (transform.parent.name + "HeadingLine", linePoints);
+    headingIndicator = VectorLine.MakeLine (transform.parent.name + "HeadingLine", linePoints, Color.green);
     orientationGridLine = VectorLine.MakeLine (transform.parent.name + "OrientationGrid", gridPoints);
 	}
 
 	void LateUpdate () {
     // Debug.Log(GetDistanceToCamera());
     // DrawHeadingIndicator();
-    DrawHeadingGrid();
+    // DrawHeadingGrid();
 	}
 
   void OnGUI () {
@@ -69,24 +69,24 @@ public class OrientationView : MonoBehaviour {
     //   headingIndicator.Draw3D();
       linePoints[1] = orientationPosition + orientationForward * 200;
     }
-    headingIndicator.Draw();
+    headingIndicator.Draw3DAuto();
   }
 
-  void DrawHeadingGrid () {
+  void DrawHeadingGrid (Transform origin) {
     cameraDistance = GetDistanceToCamera();
-    double scaling = Math.Round(cameraDistance, 0, MidpointRounding.ToEven) * 0.1;
+    // double scaling = Math.Round(cameraDistance, 0, MidpointRounding.ToEven) * 0.1;
     if(cameraDistance > 500.0f && !orientationGridLine.active) {
       Debug.Log("enabling grid");
       orientationGridLine.active = true;
-      SetVectorGrid(scaling);
-      orientationGridLine.Draw();
+      SetVectorGrid(origin);
+      orientationGridLine.Draw3DAuto();
     }
     else if (cameraDistance < 500.0f) {
       orientationGridLine.active = false;
     }
     else {
-      SetVectorGrid(scaling);
-      orientationGridLine.Draw();
+      SetVectorGrid(origin);
+      orientationGridLine.Draw3DAuto();
     }
   }
 
@@ -94,19 +94,19 @@ public class OrientationView : MonoBehaviour {
     return Camera.main.GetComponent<MouseScrollPanZoom>().GetZoomFactor();
   }
 
-  void SetVectorGrid (double scaling) {
-    int width = (int) scaling * 10;
-    int height = (int) scaling * 10;
-    int interval = (int) scaling;
-    Debug.Log(width);
+  void SetVectorGrid (Transform origin) {
+    int width = 500;
+    int height = 500;
+    int interval = 25;
+    // Debug.Log(width);
     int index = 0;
     for(int x = 0 - width / 2; x <= width / 2; x += interval) {
-      gridPoints[index++] = transform.parent.TransformPoint(new Vector3((float) x, 0f, (float) height / 2));
-      gridPoints[index++] = transform.parent.TransformPoint(new Vector3((float) x, 0f, (float) 0 - height / 2));
+      gridPoints[index++] = origin.TransformPoint(new Vector3((float) x, 0f, (float) height / 2));
+      gridPoints[index++] = origin.TransformPoint(new Vector3((float) x, 0f, (float) 0 - height / 2));
     }
     for(int z = 0 - height / 2; z <= height / 2; z += interval) {
-      gridPoints[index++] = transform.parent.TransformPoint(new Vector3((float) height / 2, 0f, (float) z));
-      gridPoints[index++] = transform.parent.TransformPoint(new Vector3((float) 0 - height / 2, 0f, (float) z));
+      gridPoints[index++] = origin.TransformPoint(new Vector3((float) height / 2, 0f, (float) z));
+      gridPoints[index++] = origin.TransformPoint(new Vector3((float) 0 - height / 2, 0f, (float) z));
     }
   }
 
