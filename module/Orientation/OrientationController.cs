@@ -6,6 +6,7 @@ public class OrientationController : MonoBehaviour, ModuleInterface {
 
   public Orientation orientation;
   private OrientationView orientationView;
+  private UIPanel orientationNGUI;
   // This should maybe be in the model, but it's a giant fuck to put it there
   public Dictionary <string, ModuleInterface> shipModules;
   private float prevYaw = 0.0f;
@@ -15,7 +16,12 @@ public class OrientationController : MonoBehaviour, ModuleInterface {
     shipModules = transform.parent.gameObject.GetComponent<ShipController>().modules;
     orientation = gameObject.GetComponent<Orientation>();
     orientationView = gameObject.GetComponent<OrientationView>();
+    // Got to be a better way, avoid using transform etc
+    // I may have to use SendMessage here
+    // Maybe just write an interface?
+    orientationNGUI = transform.Find("OrientationNGUI").GetComponent<UIPanel>();
     orientationView.enabled = false;
+    orientationNGUI.enabled = false;
     orientation.isRunning = false;
 	}
 
@@ -26,12 +32,15 @@ public class OrientationController : MonoBehaviour, ModuleInterface {
   public ModuleInterface ActivateView () {
     orientationView.enabled = true;
     orientationView.headingIndicator.active = true;
+    orientationNGUI.enabled = true;
     return this;
   }
 
   public void DeactivateView () {
     orientationView.headingIndicator.active = false;
     orientationView.enabled = false;
+    orientationNGUI.enabled = false;
+
   }
 
   public bool HasAction () {

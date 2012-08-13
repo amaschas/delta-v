@@ -20,8 +20,8 @@ public class OrientationView : MonoBehaviour {
   // private class ModuleStateChangeListener {
   //Might not need a class here, because the event delegate holds a function
     public void ModuleStateChangeListener(GameObject e) {
-      Debug.Log("Orientation Changed");
-      Debug.Log(e.name);
+      // Debug.Log("Orientation Changed");
+      // Debug.Log(e.name);
       DrawHeadingIndicator(e.transform.position, e.transform.forward);
       // DrawHeadingGrid(e.transform.parent);
       DrawHeadingGrid(e.transform);
@@ -49,12 +49,18 @@ public class OrientationView : MonoBehaviour {
     // Debug.Log(GetDistanceToCamera());
     // DrawHeadingIndicator();
     // DrawHeadingGrid();
+    if(Input.GetMouseButton(0) && Input.GetKey(KeyCode.LeftControl)) {
+      Debug.Log("clicked");
+      Debug.Log(Input.GetAxis("Mouse X"));
+      Debug.Log(Input.GetAxis("Mouse Y"));
+      orientationController.SetOrientation(Input.GetAxis("Mouse X") * 360, Input.GetAxis("Mouse Y") * 360);
+    }
 	}
 
   void OnGUI () {
-    yaw = GUI.HorizontalSlider(new Rect(5, Screen.height - 20, 100, 20), yaw, -180.0f, 180.0f);
-    pitch = GUI.HorizontalSlider(new Rect(5, Screen.height - 40, 100, 20), pitch, -180.0f, 180.0f);
-    orientationController.SetOrientation(yaw, pitch);
+    // yaw = GUI.HorizontalSlider(new Rect(5, Screen.height - 20, 100, 20), yaw, -180.0f, 180.0f);
+    // pitch = GUI.HorizontalSlider(new Rect(5, Screen.height - 40, 100, 20), pitch, -180.0f, 180.0f);
+    // orientationController.SetOrientation(yaw, pitch);
   }
 
   // DrawHeadingIndicator should be a response to an OrientationChange Event in Orientation
@@ -109,5 +115,8 @@ public class OrientationView : MonoBehaviour {
       gridPoints[index++] = origin.TransformPoint(new Vector3((float) 0 - height / 2, 0f, (float) z));
     }
   }
+
+  // Mouse control for pitch and yaw. Single function to either take mouse x and convert to yaw, or mouse y and convert to pitch
+  // Uses screen mouse x and screen mouse y. Only draws indicator, so maybe Update can call the initial function?
 
 }
