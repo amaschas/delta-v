@@ -46,14 +46,8 @@ public class OrientationView : MonoBehaviour {
 	}
 
 	void LateUpdate () {
-    // Debug.Log(GetDistanceToCamera());
-    // DrawHeadingIndicator();
-    // DrawHeadingGrid();
-    if(Input.GetMouseButton(0) && Input.GetKey(KeyCode.LeftControl)) {
-      Debug.Log("clicked");
-      Debug.Log(Input.GetAxis("Mouse X"));
-      Debug.Log(Input.GetAxis("Mouse Y"));
-      orientationController.SetOrientation(Input.GetAxis("Mouse X") * 360, Input.GetAxis("Mouse Y") * 360);
+    if(Input.GetMouseButton(0)) {
+      orientationController.SetOrientation(Input.GetAxis("Mouse X") * 45, Input.GetAxis("Mouse Y") * 45);
     }
 	}
 
@@ -104,7 +98,6 @@ public class OrientationView : MonoBehaviour {
     int width = 500;
     int height = 500;
     int interval = 25;
-    // Debug.Log(width);
     int index = 0;
     for(int x = 0 - width / 2; x <= width / 2; x += interval) {
       gridPoints[index++] = origin.TransformPoint(new Vector3((float) x, 0f, (float) height / 2));
@@ -115,8 +108,5 @@ public class OrientationView : MonoBehaviour {
       gridPoints[index++] = origin.TransformPoint(new Vector3((float) 0 - height / 2, 0f, (float) z));
     }
   }
-
-  // Mouse control for pitch and yaw. Single function to either take mouse x and convert to yaw, or mouse y and convert to pitch
-  // Uses screen mouse x and screen mouse y. Only draws indicator, so maybe Update can call the initial function?
 
 }

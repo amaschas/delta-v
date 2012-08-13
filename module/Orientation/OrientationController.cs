@@ -19,9 +19,7 @@ public class OrientationController : MonoBehaviour, ModuleInterface {
     // Got to be a better way, avoid using transform etc
     // I may have to use SendMessage here
     // Maybe just write an interface?
-    orientationNGUI = transform.Find("OrientationNGUI").GetComponent<UIPanel>();
     orientationView.enabled = false;
-    orientationNGUI.enabled = false;
     orientation.isRunning = false;
 	}
 
@@ -32,15 +30,12 @@ public class OrientationController : MonoBehaviour, ModuleInterface {
   public ModuleInterface ActivateView () {
     orientationView.enabled = true;
     orientationView.headingIndicator.active = true;
-    orientationNGUI.enabled = true;
     return this;
   }
 
   public void DeactivateView () {
     orientationView.headingIndicator.active = false;
     orientationView.enabled = false;
-    orientationNGUI.enabled = false;
-
   }
 
   public bool HasAction () {
