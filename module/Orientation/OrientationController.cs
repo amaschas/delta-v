@@ -23,6 +23,10 @@ public class OrientationController : MonoBehaviour, ModuleInterface {
     get { return transform.name; }
   }
 
+  public void OnSliderChange (float value) {
+    Debug.Log(value);
+  }
+
   public ModuleInterface ActivateView () {
     orientationView.enabled = true;
     orientationView.headingIndicator.active = true;
