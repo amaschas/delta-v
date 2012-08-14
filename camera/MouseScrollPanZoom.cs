@@ -101,7 +101,7 @@ public class MouseScrollPanZoom : MonoBehaviour
             transform.position = position;
         }
         // otherwise if middle mouse is selected, we pan by way of transforming the target in screenspace
-        else if (Input.GetMouseButton(0))
+        else if (Input.GetMouseButton(0) && Input.GetKey(KeyCode.LeftControl))
         {
             float mousePosX = Input.mousePosition.x;
             float mousePosY = Input.mousePosition.y;

@@ -1,4 +1,5 @@
 using UnityEngine;
+// Might not need System here anymore without EventArgs
 using System;
 using System.Collections;
 
@@ -18,6 +19,8 @@ public class Orientation : Module {
   // Lets not get too fancy here
   void OnStateChange() {
     if(StateChange != null)
+      // Can an event send any state object?
+      // Can I work around EventArgs this way?
       StateChange(this.gameObject);
   }
   // *******************

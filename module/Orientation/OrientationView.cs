@@ -20,8 +20,8 @@ public class OrientationView : MonoBehaviour {
   // private class ModuleStateChangeListener {
   //Might not need a class here, because the event delegate holds a function
     public void ModuleStateChangeListener(GameObject e) {
-      Debug.Log("Orientation Changed");
-      Debug.Log(e.name);
+      // Debug.Log("Orientation Changed");
+      // Debug.Log(e.name);
       DrawHeadingIndicator(e.transform.position, e.transform.forward);
       // DrawHeadingGrid(e.transform.parent);
       DrawHeadingGrid(e.transform);
@@ -46,15 +46,15 @@ public class OrientationView : MonoBehaviour {
 	}
 
 	void LateUpdate () {
-    // Debug.Log(GetDistanceToCamera());
-    // DrawHeadingIndicator();
-    // DrawHeadingGrid();
+    if(Input.GetMouseButton(0)) {
+      orientationController.SetOrientation(Input.GetAxis("Mouse X") * 45, Input.GetAxis("Mouse Y") * 45);
+    }
 	}
 
   void OnGUI () {
-    yaw = GUI.HorizontalSlider(new Rect(5, Screen.height - 20, 100, 20), yaw, -180.0f, 180.0f);
-    pitch = GUI.HorizontalSlider(new Rect(5, Screen.height - 40, 100, 20), pitch, -180.0f, 180.0f);
-    orientationController.SetOrientation(yaw, pitch);
+    // yaw = GUI.HorizontalSlider(new Rect(5, Screen.height - 20, 100, 20), yaw, -180.0f, 180.0f);
+    // pitch = GUI.HorizontalSlider(new Rect(5, Screen.height - 40, 100, 20), pitch, -180.0f, 180.0f);
+    // orientationController.SetOrientation(yaw, pitch);
   }
 
   // DrawHeadingIndicator should be a response to an OrientationChange Event in Orientation
@@ -98,7 +98,6 @@ public class OrientationView : MonoBehaviour {
     int width = 500;
     int height = 500;
     int interval = 25;
-    // Debug.Log(width);
     int index = 0;
     for(int x = 0 - width / 2; x <= width / 2; x += interval) {
       gridPoints[index++] = origin.TransformPoint(new Vector3((float) x, 0f, (float) height / 2));
