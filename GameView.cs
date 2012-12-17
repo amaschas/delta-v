@@ -29,6 +29,8 @@ public class GameView : MonoBehaviour {
     if(GUI.Button(new Rect(Screen.width - 105, Screen.height - 25, 100, 20), "Play Actions")) {
       // Each queue has to run in parallel, maybe use sendmessage?
       // gameController.SendMessage("RunQueue"); <- doesn't work
+      // Maybe trigger the queues by unfreezing the objects?
+      Time.timeScale = 1;
       foreach(KeyValuePair<string, ShipInterface> pair in gameController.ships) {
         pair.Value.RunQueue();
       }

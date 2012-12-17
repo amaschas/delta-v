@@ -11,6 +11,7 @@ public class GameController : MonoBehaviour {
 
   public void Start () {
     InitShips();
+    Time.timeScale = 0;
   }
 
   public void InitShips () {
@@ -31,5 +32,4 @@ public class GameController : MonoBehaviour {
 		selected.Select();
     Camera.main.GetComponent<MouseScrollPanZoom>().target = UISelected.transform;
 	}
-
 }

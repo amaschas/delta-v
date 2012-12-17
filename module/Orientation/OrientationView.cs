@@ -16,22 +16,19 @@ public class OrientationView : MonoBehaviour {
   // Camera.main should update this via event
   private float cameraDistance;
 
-  // *******************
-  // private class ModuleStateChangeListener {
-  //Might not need a class here, because the event delegate holds a function
-    public void ModuleStateChangeListener(GameObject e) {
-      // Debug.Log("Orientation Changed");
-      // Debug.Log(e.name);
-      DrawHeadingIndicator(e.transform.position, e.transform.forward);
-      // DrawHeadingGrid(e.transform.parent);
-      DrawHeadingGrid(e.transform);
-    }
-  // }
-  // *******************
+  // This responds to the event dispatcher in Orientation
+  public void ModuleStateChangeListener(GameObject e) {
+    DrawHeadingIndicator(e.transform.position, e.transform.forward);
+    DrawHeadingGrid(e.transform);
+    // This should also tell the controller to update the ship action queue
+  }
 
 	void Start () {
     transform.GetComponent<Orientation>().StateChange += ModuleStateChangeListener;
     orientationController = gameObject.GetComponent<OrientationController>();
+    
+    // Defaults for HeadingLine and OrientationGrid VectorLine objects
+    // Should maybe go in their own init method
     Color lineColor = Color.white;
     float lineWidth = 1.0f;
     float capLength = 0.0f;
@@ -51,16 +48,10 @@ public class OrientationView : MonoBehaviour {
     }
 	}
 
-  void OnGUI () {
-    // yaw = GUI.HorizontalSlider(new Rect(5, Screen.height - 20, 100, 20), yaw, -180.0f, 180.0f);
-    // pitch = GUI.HorizontalSlider(new Rect(5, Screen.height - 40, 100, 20), pitch, -180.0f, 180.0f);
-    // orientationController.SetOrientation(yaw, pitch);
-  }
-
-  // DrawHeadingIndicator should be a response to an OrientationChange Event in Orientation
-  // Camera zoom changes should also message the Selected Ship and the GameController
+  // Camera zoom changes should message the Selected Ship and the GameController
   void DrawHeadingIndicator (Vector3 orientationPosition, Vector3 orientationForward) {
     linePoints[0] = orientationPosition;
+    // This stuff is intended to handle special zoom cases for the grid. Currently disabled.
     if(GetDistanceToCamera() > 500) {
     //   headingIndicator.Draw();
       linePoints[1] = orientationPosition + orientationForward * 200;
@@ -72,9 +63,9 @@ public class OrientationView : MonoBehaviour {
     headingIndicator.Draw3DAuto();
   }
 
+  // This should be named DrawOrientationGrid for clarity
   void DrawHeadingGrid (Transform origin) {
     cameraDistance = GetDistanceToCamera();
-    // double scaling = Math.Round(cameraDistance, 0, MidpointRounding.ToEven) * 0.1;
     if(cameraDistance > 500.0f && !orientationGridLine.active) {
       Debug.Log("enabling grid");
       orientationGridLine.active = true;
@@ -90,6 +81,7 @@ public class OrientationView : MonoBehaviour {
     }
   }
 
+  // This ultimately needs to happen when the camera sends a message
   float GetDistanceToCamera () {
     return Camera.main.GetComponent<MouseScrollPanZoom>().GetZoomFactor();
   }

@@ -9,8 +9,6 @@ public class ShipController : MonoBehaviour, ShipInterface {
 	public Dictionary<string, ModuleInterface> modules;
 	public Queue<ModuleAction> actionQueue;
 
-	// public MeshInterface mesh;
-
 	//This should not exist
 	private OrientationController orientationController;
 
@@ -36,10 +34,6 @@ public class ShipController : MonoBehaviour, ShipInterface {
       ship.modules.Add(child.name, controller);
     }
 
-    // foreach (Transform child in transform) if (child.name == "ShipMesh") {
-    //   Debug.Log("Testing " + child.name);
-    //   mesh = child.gameObject.GetComponent(typeof(MeshInterface)) as MeshInterface;
-    // }
 	}
 
 	public string Name () {
@@ -50,14 +44,6 @@ public class ShipController : MonoBehaviour, ShipInterface {
 		if(ship.runQueue && GameObject.Find("GameController").GetComponent<GameController>().turnPlaying) {
 			RunQueue();
 		}
-
-		// Unity does this automatically :<
-    // if(Camera.main.GetComponent<MouseScrollPanZoom>().GetZoomFactor() > 500) {
-    //   mesh.DisableRender();
-    // }
-    // else {
-    //   mesh.EnableRender();
-    // }
 	}
 
 	public void Select () {

@@ -2,11 +2,18 @@ using UnityEngine;
 using System;
 using System.Collections;
 
-// public delegate void ModuleStateChangeHandler (object sender, EventArgs e);
-
 public class Module : MonoBehaviour {
   public int HeatCost;
   public int actionCost;
   public float durationModifier;
-  // public bool IsDoingAction;
+
+  // New Messaging stuff
+  // *******************
+  public delegate void ModuleStateChangeHandler(GameObject e);
+  public event ModuleStateChangeHandler StateChange;
+
+  public void OnStateChange() {
+    if(StateChange != null)
+      StateChange(this.gameObject);
+  }
 }

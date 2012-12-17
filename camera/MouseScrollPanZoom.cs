@@ -87,7 +87,7 @@ public class MouseScrollPanZoom : MonoBehaviour
             desiredDistance -= Input.GetAxis("Mouse Y") * Time.deltaTime * zoomRate*0.125f * Mathf.Abs(desiredDistance);
         }
         // If middle mouse and left alt are selected? ORBIT
-        else if (Input.GetMouseButton(0) && Input.GetKey(KeyCode.LeftAlt))
+        else if (Input.GetMouseButton(1) && Input.GetKey(KeyCode.LeftAlt))
         {
             x += Input.GetAxis("Mouse X") * xSpeed * Time.deltaTime;
             y -= Input.GetAxis("Mouse Y") * ySpeed * Time.deltaTime;
@@ -101,7 +101,7 @@ public class MouseScrollPanZoom : MonoBehaviour
             transform.position = position;
         }
         // otherwise if middle mouse is selected, we pan by way of transforming the target in screenspace
-        else if (Input.GetMouseButton(0) && Input.GetKey(KeyCode.LeftControl))
+        else if (Input.GetMouseButton(1) && Input.GetKey(KeyCode.LeftControl))
         {
             float mousePosX = Input.mousePosition.x;
             float mousePosY = Input.mousePosition.y;
