@@ -4,74 +4,88 @@ using System.Collections.Generic;
 
 public class OrientationController : MonoBehaviour, ModuleInterface {
 
-  public Orientation orientation;
-  private OrientationView orientationView;
+	public Orientation orientation;
+	private OrientationView orientationView;
 
 	void Start () {
-    orientation = gameObject.GetComponent<Orientation>();
-    orientationView = gameObject.GetComponent<OrientationView>();
-    orientationView.enabled = false;
-    orientation.isRunning = false;
+		orientation = gameObject.GetComponent<Orientation>();
+		orientationView = gameObject.GetComponent<OrientationView>();
+		orientationView.SetActive(false);
+		orientation.isRunning = false;
+		// Debug.Log(orientation.isRunning);
 	}
 
-  public string name {
-    get { return transform.name; }
-  }
+	void OnEnable() {
+		orientationView.SetActive(true);
+	}
 
-  public ModuleInterface ActivateView () {
-    orientationView.enabled = true;
-    orientationView.headingIndicator.active = true;
-    return this;
-  }
+	void OnDisable() {
+		orientationView.SetActive(false);
+	}
 
-  public void DeactivateView () {
-    orientationView.headingIndicator.active = false;
-    orientationView.enabled = false;
-  }
+	public string name {
+		get { return transform.name; }
+	}
 
-  public bool HasAction () {
-    if(GetDuration() > 0) {
-      return true;
-    }
-    else return false;
-  }
+	public ModuleInterface ActivateView () {
+		// View should activate itself
+		// foreach(var property in orientation.GetType().GetProperties()) {
+		// 	Debug.Log(property.Name);
+		// }
+		orientationView.enabled = true;
+		Debug.Log(orientationView.headingIndicator);
+		orientationView.headingIndicator.active = true;
+		return this;
+	}
 
-  public ModuleAction GetAction () {
-    Quaternion rotation = transform.rotation;
-    ModuleAction action = new ModuleAction(this, rotation, GetDuration());
-    return action;
-  }
+	public void DeactivateView () {
+		orientationView.headingIndicator.active = false;
+		orientationView.enabled = false;
+	}
 
-  public void SetOrientation (float yaw, float pitch) {
-    orientation.ChangeOrientation(yaw, pitch);
-  }
+	public bool HasAction () {
+		if(GetDuration() > 0) {
+			return true;
+		}
+		else return false;
+	}
 
-  public void Run (ModuleAction action) {
-    if(!orientation.isRunning) {
-      orientation.isRunning = true;
-    }
-    if(Quaternion.Angle(transform.parent.rotation, action.rotationTarget) > .1) {
-      transform.parent.gameObject.GetComponent<ShipController>().Reorient(action.rotationTarget, orientation.durationModifier);
-    }
-    else {
-      orientation.isRunning = false;
-    }
-    transform.rotation = transform.parent.rotation;
-  }
+	public ModuleAction GetAction () {
+		Quaternion rotation = transform.rotation;
+		ModuleAction action = new ModuleAction(this, rotation, GetDuration());
+		return action;
+	}
 
-  public bool IsRunning () {
-    return orientation.isRunning;
-  }
+	public void SetOrientation (float yaw, float pitch) {
+		orientation.ChangeOrientation(yaw, pitch);
+	}
 
-  public float GetDuration () {
-    float duration;
-    if(orientation.durationModifier != 0.0f) {
-      duration = Quaternion.Angle(transform.parent.rotation, transform.rotation) / orientation.durationModifier;
-      Debug.Log(duration);
-    }
-    else {
-      duration = Quaternion.Angle(transform.parent.rotation, transform.rotation);
-    }
-    return duration;
-  }
+	public void Run (ModuleAction action) {
+		if(!orientation.isRunning) {
+			orientation.isRunning = true;
+		}
+		if(Quaternion.Angle(transform.parent.rotation, action.rotationTarget) > .1) {
+			transform.parent.gameObject.GetComponent<ShipController>().Reorient(action.rotationTarget, orientation.durationModifier);
+		}
+		else {
+			orientation.isRunning = false;
+		}
+		transform.rotation = transform.parent.rotation;
+	}
+
+	public bool IsRunning () {
+		return orientation.isRunning;
+	}
+
+	public float GetDuration () {
+		float duration;
+		if(orientation.durationModifier != 0.0f) {
+			duration = Quaternion.Angle(transform.parent.rotation, transform.rotation) / orientation.durationModifier;
+			Debug.Log(duration);
+		}
+		else {
+			duration = Quaternion.Angle(transform.parent.rotation, transform.rotation);
+		}
+		return duration;
+	}
 }
