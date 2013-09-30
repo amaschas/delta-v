@@ -11,7 +11,7 @@ public class OrientationController : MonoBehaviour, ModuleInterface {
 		orientation = gameObject.GetComponent<Orientation>();
 		orientationView = gameObject.GetComponent<OrientationView>();
 		orientationView.SetActive(false);
-		orientation.isRunning = false;
+		// orientation.isRunning = false;
 		// Debug.Log(orientation.isRunning);
 	}
 
@@ -23,32 +23,32 @@ public class OrientationController : MonoBehaviour, ModuleInterface {
 		orientationView.SetActive(false);
 	}
 
-	public string name {
-		get { return transform.name; }
-	}
+	// public string name {
+	// 	get { return transform.name; }
+	// }
 
-	public ModuleInterface ActivateView () {
-		// View should activate itself
-		// foreach(var property in orientation.GetType().GetProperties()) {
-		// 	Debug.Log(property.Name);
-		// }
-		orientationView.enabled = true;
-		Debug.Log(orientationView.headingIndicator);
-		orientationView.headingIndicator.active = true;
-		return this;
-	}
+	// public ModuleInterface ActivateView () {
+	// 	// View should activate itself
+	// 	// foreach(var property in orientation.GetType().GetProperties()) {
+	// 	// 	Debug.Log(property.Name);
+	// 	// }
+	// 	orientationView.enabled = true;
+	// 	Debug.Log(orientationView.headingIndicator);
+	// 	orientationView.headingIndicator.active = true;
+	// 	return this;
+	// }
 
-	public void DeactivateView () {
-		orientationView.headingIndicator.active = false;
-		orientationView.enabled = false;
-	}
+	// public void DeactivateView () {
+	// 	orientationView.headingIndicator.active = false;
+	// 	orientationView.enabled = false;
+	// }
 
-	public bool HasAction () {
-		if(GetDuration() > 0) {
-			return true;
-		}
-		else return false;
-	}
+	// public bool HasAction () {
+	// 	if(GetDuration() > 0) {
+	// 		return true;
+	// 	}
+	// 	else return false;
+	// }
 
 	public ModuleAction GetAction () {
 		Quaternion rotation = transform.rotation;
