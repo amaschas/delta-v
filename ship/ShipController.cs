@@ -4,30 +4,47 @@ using System.Collections.Generic;
 
 public class ShipController : MonoBehaviour, ShipInterface {
 
+	// Ship data object
 	private Ship ship;
+
+	// Ship view object
 	private ShipView shipView;
+
+	// Registry of modules via their interface
 	public Dictionary<string, ModuleInterface> modules;
+
+	// The queue of module actions to execute
+	// TODO: most actions will not be sequential, so we really need a way to trigger events at x time, in parallel, for y duration, and for events to be linked
 	public Queue<ModuleAction> actionQueue;
+
+	// The module action currently being edited in the GUI
+	// Should this belong to the ship data object?
+	// The principle being that the controller only handles data in a transient fashion?
+	public ModuleAction selectedModuleAction;
+
+	// The currently active module in the GUI
+	// TODO: can this just be an aspect of selectedModuleAction?
+	private ModuleInterface activeModule = null;
 
 	//This should not exist
 	private OrientationController orientationController;
-
-	// This should be in Ship.cs
-	private ModuleInterface activeModule = null;
 
     // void Start() { Init(); }
     // void OnEnable() { Init(); }
 
 	public void Start () {
 		Debug.Log("Initializing " + transform.name);
+
+		// Init ship data object
 		ship = gameObject.GetComponent<Ship>();
+
+		// Init view
 		shipView = gameObject.GetComponent<ShipView>();
+
 		modules = ship.modules;
+
 		actionQueue = ship.actionQueue;
-		// This should probably not exist;
-		// orientationController = transform.Find("Orientation").GetComponent<OrientationController>();
-		// shipView.enabled = false;
-		// ship.runQueue = false;
+
 		foreach (Transform child in transform) if (child.CompareTag("Module")) {
 			Debug.Log("Adding " + child.name);
 			// Can't I just add the names to the interface?
@@ -41,6 +58,11 @@ public class ShipController : MonoBehaviour, ShipInterface {
 		return transform.name;
 	}
 
+	void Update () {
+
+	}
+
+	// Each update, message all relevant modules on that frame to complete one discrete action
 	void FixedUpdate () {
 		// This should listen to an GameController event
 		// I wonder if this even needs to be in fixedupdate, given that the actions themselves play in an update
@@ -73,32 +95,10 @@ public class ShipController : MonoBehaviour, ShipInterface {
 	}
 
 	public void AddCurrentActionToQueue () {
-		// Debug.Log(orientationController.HasAction());
-		// The modules should talk to orientatiocontroller if they need to
-		// if(orientationController.HasAction()) {
-		// 	ship.actionQueue.Enqueue(orientationController.GetAction());
-		// }
-		// perhaps activeModule.GetActions() should return an array?
 		if(activeModule != null && activeModule.HasAction()) {
 			ship.actionQueue.Enqueue(activeModule.GetAction());
 		}
 	}
-
-	// public void RunQueue () {
-	// 	if(ship.actionQueue.Count > 0) {
-	// 		ship.runQueue = true;
-	// 		ModuleAction action = ship.actionQueue.Peek();
-	// 		action.DoAction();
-	// 		// Need to do this with an event listener
-	// 		// rather than use the ship interface
-	// 		if(!ship.modules[action.module.name].IsRunning()) {
-	// 			ship.actionQueue.Dequeue();
-	// 		}
-	// 	}
-	// 	else {
-	// 		ship.runQueue = false;
-	// 	}
-	// }
 
 	// Need a way for module sto hook onto ship behaviors, maybe use ship interface?
 	public void Reorient (Quaternion rotation, float rate) {

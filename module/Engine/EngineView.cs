@@ -12,6 +12,7 @@ public class EngineView : MonoBehaviour {
 	}
 	
 	void OnGUI () {
-    engine.thrustDuration = GUI.HorizontalSlider(new Rect(105, Screen.height - 20, 100, 20), engine.thrustDuration, 0, 7);
+    // engine.thrustDuration = GUI.HorizontalSlider(new Rect(105, Screen.height - 20, 100, 20), engine.thrustDuration, 0, 7);
+    // This needs to return a module action to the shipController
 	}
 }
