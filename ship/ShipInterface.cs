@@ -15,11 +15,11 @@ public interface ShipInterface {
   // Activates modules UI and inits or edits a module action
   void ActivateModule (ModuleControllerInterface module);
 
-  // TODO: make this not work as a queue
-  void AddCurrentActionToQueue ();
+  // // TODO: make this not work as a queue
+  // void AddCurrentActionToQueue ();
 
-  // // TODO: see above
-  void RunQueue ();
+  // // // TODO: see above
+  // void RunQueue ();
 
   // re-orients the ship model
   void Reorient (Quaternion lookRotation, float rate);

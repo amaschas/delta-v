@@ -9,7 +9,8 @@ public class EngineAction : ModuleAction {
 	public void EngineAction( ModuleInterface moduleController, float duration );
 
 	void Start () {
-		
+
+		// Calculate heat generation for thrust duration
 		heatGeneration = duration * HeatRate();
 	}
 

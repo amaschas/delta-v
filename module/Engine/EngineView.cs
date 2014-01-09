@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class EngineView : MonoBehaviour {
+public class EngineView : ModuleView {
 
   private Engine engine;
   private EngineController engineController;
