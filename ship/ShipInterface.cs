@@ -13,7 +13,7 @@ public interface ShipInterface {
   void Deselect ();
 
   // Activates modules UI and inits or edits a module action
-  void ActivateModule (ModuleInterface module);
+  void ActivateModule (ModuleControllerInterface module);
 
   // TODO: make this not work as a queue
   void AddCurrentActionToQueue ();

@@ -11,7 +11,7 @@ public class ShipController : MonoBehaviour, ShipInterface {
 	private ShipView shipView;
 
 	// Registry of modules via their interface
-	public Dictionary<string, ModuleInterface> modules;
+	public Dictionary<string, ModuleControllerInterface> modules;
 
 	// The queue of module actions to execute
 	// TODO: most actions will not be sequential, so we really need a way to trigger events at x time, in parallel, for y duration, and for events to be linked
@@ -24,7 +24,7 @@ public class ShipController : MonoBehaviour, ShipInterface {
 
 	// The currently active module in the GUI
 	// TODO: can this just be an aspect of selectedModuleAction?
-	private ModuleInterface activeModule = null;
+	private ModuleControllerInterface activeModule = null;
 
 	//This should not exist
 	private OrientationController orientationController;
@@ -45,13 +45,33 @@ public class ShipController : MonoBehaviour, ShipInterface {
 
 		actionQueue = ship.actionQueue;
 
+		// Get all of the modules and pass their interface to the module initializer
 		foreach (Transform child in transform) if (child.CompareTag("Module")) {
 			Debug.Log("Adding " + child.name);
-			// Can't I just add the names to the interface?
-			ModuleInterface controller = child.gameObject.GetComponent(typeof(ModuleInterface)) as ModuleInterface;
-      ship.modules.Add(child.name, controller);
+			ModuleControllerInterface controller = child.gameObject.GetComponent(typeof(ModuleControllerInterface)) as ModuleControllerInterface;
+			InitModule(controller)
     }
 
+	}
+
+	private void InitModule( ModuleControllerInterface moduleController ) {
+
+		// Add the module to the ship's module registry
+		ship.modules.Add(moduleController.Name(), moduleController);
+
+		// Connect ship to module events
+		moduleController.NewModuleAction += AddNewModuleAction;
+	}
+
+	// Gets
+	public void AddNewModuleAction(ModuleControllerInterface sender, ModuleActionArgs args) {
+
+		// Get action from event args
+		action = ModuleActionArgs.action;
+
+		// Add action to timeline
+
+		return;
 	}
 
 	public string Name () {
@@ -87,7 +107,7 @@ public class ShipController : MonoBehaviour, ShipInterface {
 		// }
 	}
 
-	public void ActivateModule (ModuleInterface module) {
+	public void ActivateModule (ModuleControllerInterface module) {
 		if(activeModule != null) {
 			module.DeactivateView();
 		}

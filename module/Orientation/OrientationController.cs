@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class OrientationController : MonoBehaviour, ModuleInterface {
+public class OrientationController : MonoBehaviour, ModuleControllerInterface {
 
 	public Orientation orientation;
 	private OrientationView orientationView;
@@ -27,7 +27,7 @@ public class OrientationController : MonoBehaviour, ModuleInterface {
   //   Debug.Log(value);
   // }
 
-  // public ModuleInterface ActivateView () {
+  // public ModuleControllerInterface ActivateView () {
   //   orientationView.enabled = true;
   //   orientationView.headingIndicator.active = true;
   //   return this;
@@ -37,7 +37,7 @@ public class OrientationController : MonoBehaviour, ModuleInterface {
 	// 	get { return transform.name; }
 	// }
 
-	// public ModuleInterface ActivateView () {
+	// public ModuleControllerInterface ActivateView () {
 	// 	// View should activate itself
 	// 	// foreach(var property in orientation.GetType().GetProperties()) {
 	// 	// 	Debug.Log(property.Name);
