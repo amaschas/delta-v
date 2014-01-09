@@ -9,7 +9,8 @@ public class EngineAction : ModuleAction {
 	public void EngineAction( ModuleInterface moduleController, float duration );
 
 	void Start () {
-
+		
+		heatGeneration = duration * HeatRate();
 	}
 
 }

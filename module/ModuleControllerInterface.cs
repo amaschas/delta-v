@@ -4,9 +4,9 @@ using System.Collections;
 // Should be ModuleControllerInterface
 public interface ModuleControllerInterface {
 
-	string Name ();
+	public string Name ();
 
-	float HeatRate ();
+	public float HeatRate ();
 
   ModuleControllerInterface ActivateView ();
   void DeactivateView ();

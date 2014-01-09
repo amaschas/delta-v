@@ -4,16 +4,16 @@ using System.Collections.Generic;
 
 public class ModuleAction : MonoBehaviour, ModuleActionInterface {
 
-	public ModuleControllerInterface module;
+	public ModuleControllerInterface moduleController;
 
 	public float heatGeneration;
 
 	public delegate void ModuleActionHandler(ModuleActionInterface sender);
 	public event ModuleActionHandler DoModuleAction;
 
-	public virtual void OnDoModuleAction () {
+	public void OnDoModuleAction () {
 
-		// Make a copy ro be more thread-safe
+		// Make a copy to be more thread-safe
 		ModuleActionHandler handler = DoModuleAction;
 
 		if (handler != null) {
