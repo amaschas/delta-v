@@ -25,7 +25,7 @@ public class ShipView : MonoBehaviour {
         distanceFromTop += 25;
       }
     }
-    // Move this into individual modules
+    // Need a new UI for created actions
     // distanceFromTop = 30;
     // GUI.Box (new Rect (5,5,100,400), "Actions");
     // foreach (ModuleAction action in shipController.actionQueue) {

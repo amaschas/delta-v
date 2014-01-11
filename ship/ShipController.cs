@@ -63,7 +63,7 @@ public class ShipController : MonoBehaviour, ShipInterface {
 		moduleController.NewModuleAction += AddNewModuleAction;
 	}
 
-	// Gets
+	// Might need to be Object sender
 	public void AddNewModuleAction(ModuleControllerInterface sender, ModuleActionArgs args) {
 
 		// Get action from event args

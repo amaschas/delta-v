@@ -3,8 +3,9 @@ using System.Collections;
 
 public class ModuleView : MonoBehaviour, ModuleActionInterface {
 
-	public delegate void ModuleViewHandler(ModuleViewInterface sender, ModuleActionArgs args);
-	public event ModuleViewHandler AddModuleAction;
+	// public delegate void ModuleViewHandler(ModuleViewInterface sender, ModuleActionArgs args);
+	// public event ModuleViewHandler AddModuleAction;
+	public event EventHandler<ModuleActionArgs> AddModuleAction;
 
 	public void OnAddModuleAction () {
 
