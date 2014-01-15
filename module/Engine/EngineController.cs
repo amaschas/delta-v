@@ -4,27 +4,27 @@ using System.Collections.Generic;
 
 public class EngineController : MonoBehaviour, ModuleControllerInterface {
 
-	private Engine engine;
-	private EngineView engineView;
+	// private Engine engine;
+	// private EngineView engineView;
 
-	void Start () {
-		engineView = gameObject.GetComponent<EngineView>();
-		engine = gameObject.GetComponent<Engine>();
-		engineView.enabled = false;
-	}
+	// void Start () {
+	// 	engineView = gameObject.GetComponent<EngineView>();
+	// 	engine = gameObject.GetComponent<Engine>();
+	// 	engineView.enabled = false;
+	// }
 
-	public string Name () {
-		return transform.name;
-	}
+	// public string Name () {
+	// 	return transform.name;
+	// }
 
-	public ModuleControllerInterface ActivateView () {
-		engineView.enabled = true;
-		return this;
-	}
+	// public ModuleControllerInterface ActivateView () {
+	// 	engineView.enabled = true;
+	// 	return this;
+	// }
 
-	public void DeactivateView () {
-		engineView.enabled = false;
-	}
+	// public void DeactivateView () {
+	// 	engineView.enabled = false;
+	// }
 
 	public void Run (ModuleAction action) {
 		// This needs to happen in a fixed update, maybe kill this run structure entirely, and just run fixedupdate in each module?

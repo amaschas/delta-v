@@ -3,23 +3,35 @@ using System.Collections;
 
 public class ModuleView : MonoBehaviour, ModuleActionInterface {
 
+	protected EventManager eventManager;
+
+	void Start () {
+		// Get module controller
+		moduleController = gameObject.GetComponent<ModuleControllerInterface>();
+
+		// Set up event listeners
+		moduleController.ModuleSelected += ActivateModuleView;
+		moduleController.ModuleDeselected += DeactivateModuleView;
+	}
+
+	void ActivateModuleView () {
+		// activate self
+		// this.enabled = true;
+	}
+
+	void DeactivateModuleView () {
+		// deactivate self
+		// this.enabled = false;
+	}
+
 	// public delegate void ModuleViewHandler(ModuleViewInterface sender, ModuleActionArgs args);
 	// public event ModuleViewHandler AddModuleAction;
 	public event EventHandler<ModuleActionArgs> AddModuleAction;
 
-	public void OnAddModuleAction () {
-
-		// Make a copy to be more thread-safe
-		ModuleViewHandler handler = AddModuleAction;
-
-		if (handler != null) {
-			action = GetModuleAction();
-			handler(this, action);
-		}
-	}
+	protected virtual void OnAddModuleAction () { eventManager.RaiseEvent(AddModuleAction, GetModuleAction()); }
 
 	public ModuleActionArgs GetModuleAction() {
-		return new ModuleAction();
+		return new ModuleActionArgs();
 	}
 
 	// Renders any global module UI elements

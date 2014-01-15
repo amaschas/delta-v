@@ -10,12 +10,16 @@ public interface ModuleActionInterface {
 	float heatGeneration;
 
 	// Module event delegate
-	delegate void ModuleActionHandler(ModuleActionInterface sender);
+	// delegate void ModuleActionHandler(ModuleActionInterface sender);
 
 	// Triggered (likely by the ship) to the subscribed module when the action is to be performed
-	event ModuleActionHandler DoModuleAction;
+	// event ModuleActionHandler DoModuleAction;
 
 	// Triggered (by the ship again) when this action is to be edited
-	event ModuleActionHandler EditModuleAction;
+	// event ModuleActionHandler EditModuleAction;
+
+	event EventHandler<ModuleActionArgs> DoModuleAction;
+
+	event EventHandler<ModuleActionArgs> EditModuleAction;
 
 } 

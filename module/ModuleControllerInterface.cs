@@ -4,28 +4,26 @@ using System.Collections;
 // TODO: implement ModuleController
 public interface ModuleControllerInterface {
 
+	EventManager eventManager;
+
 	string Name ();
 
-	float HeatRate ();
+	// float HeatRate ();
 
-  ModuleControllerInterface ActivateView ();
-  void DeactivateView ();
+  void SelectModule ();
+  void DeselectModule ()
 
   // This event is fired when a new action is added from the module interface
   // It should send the ModuleActionInterface to the listener (ship)
 	// delegate void ModuleHandler(ModuleControllerInterface sender, ModuleActionArgs args);
 	// event ModuleHandler NewModuleAction;
-	public event EventHandler<ModuleActionArgs> NewModuleAction;
+	event EventHandler<ModuleActionArgs> NewModuleAction;
 
 	// Sent when an new action is received and started
 	// event ModuleHandler ModuleActionStarted;
-	public event EventHandler<ModuleActionArgs> ModuleActionStarted;
+	event EventHandler<ModuleActionArgs> ModuleActionStarted;
 
 	// Sent when a module finished an action
 	// event ModuleHandler ModuleActionFinished;
-	public event EventHandler<ModuleActionArgs> ModuleActionFinished;
-}
-
-class ModuleActionArgs : EventArgs {
-	public ModuleActionInterface action;
+	event EventHandler<ModuleActionArgs> ModuleActionFinished;
 }
