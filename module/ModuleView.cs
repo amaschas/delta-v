@@ -24,8 +24,6 @@ public class ModuleView : MonoBehaviour, ModuleActionInterface {
 		// this.enabled = false;
 	}
 
-	// public delegate void ModuleViewHandler(ModuleViewInterface sender, ModuleActionArgs args);
-	// public event ModuleViewHandler AddModuleAction;
 	public event EventHandler<ModuleActionArgs> AddModuleAction;
 
 	protected virtual void OnAddModuleAction () { eventManager.RaiseEvent(AddModuleAction, GetModuleAction()); }

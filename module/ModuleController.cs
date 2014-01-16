@@ -16,11 +16,8 @@ public class ModuleController : MonoBehaviour, ModuleControllerInterface {
 		return transform.name;
 	}
 
-	/// Note sure if this should take action args or just an action
-	// Has to pass this arg onto the event somehow?
-	// Can obviate this by have moduels track their own queue
 	public void SelectModule ( ModuleActionArgs args = ModuleActionArgs.Empty ) {
-		OnModuleSelected();
+		OnModuleSelected(args);
 	}
 
 	public void DeselectModule () {
@@ -33,7 +30,7 @@ public class ModuleController : MonoBehaviour, ModuleControllerInterface {
 	public event EventHandler<ModuleActionArgs> ModuleActionStarted;
 	public event EventHandler<ModuleActionArgs> ModuleActionFinished;
 
-	protected virtual void OnModuleSelected () { eventManager.RaiseEvent(ModuleSelected); }
+	protected virtual void OnModuleSelected (ModuleActionArgs args) { eventManager.RaiseEvent(ModuleSelected, args); }
 	protected virtual void OnModuleDeselected () { eventManager.RaiseEvent(ModuleDeselected); }
 	protected virtual void OnNewModuleAction () { eventManager.RaiseEvent(NewModuleAction); }
 	protected virtual void OnModuleActionStarted () { eventManager.RaiseEvent(ModuleActionStarted); }
