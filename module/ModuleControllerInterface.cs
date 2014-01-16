@@ -10,6 +10,7 @@ public interface ModuleControllerInterface {
 
   // Events
 	event EventHandler<ModuleActionArgs> NewModuleAction;
+	// event EventHandler<ModuleActionArgs> DoModuleAction;
 	event EventHandler<ModuleActionArgs> ModuleActionStarted;
 	event EventHandler<ModuleActionArgs> ModuleActionFinished;
 }

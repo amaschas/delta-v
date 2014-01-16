@@ -13,9 +13,11 @@ public class ShipController : MonoBehaviour, ShipInterface {
 	// Registry of modules via their interface
 	public Dictionary<string, ModuleControllerInterface> modules;
 
+	public OrderedDictionary<ModuleControllerInterface, ModuleActionArgs> moduleActions;
+
 	// The queue of module actions to execute
 	// TODO: most actions will not be sequential, so we really need a way to trigger events at x time, in parallel, for y duration, and for events to be linked
-	public Queue<ModuleAction> actionQueue;
+	// public Queue<ModuleAction> actionQueue;
 
 	// The module action currently being edited in the GUI
 	// Should this belong to the ship data object?
@@ -65,21 +67,18 @@ public class ShipController : MonoBehaviour, ShipInterface {
 
 	public void AddNewModuleAction(object sender, ModuleActionArgs args) {
 
-		// Get action from event args
-		action = ModuleActionArgs.action;
-
 		// Add action to timeline
-
-		return;
+		// This needs to insert the action based on the time offset of the action
+		moduleActions.Add(sender, args);
 	}
 
 	public string Name () {
 		return transform.name;
 	}
 
-	void Update () {
+	// void Update () {
 
-	}
+	// }
 
 	// Each update, message all relevant modules on that frame to complete one discrete action
 	void FixedUpdate () {
@@ -106,18 +105,18 @@ public class ShipController : MonoBehaviour, ShipInterface {
 		// }
 	}
 
-	public void ActivateModule (ModuleControllerInterface module) {
-		if(activeModule != null) {
-			module.DeactivateView();
-		}
-		activeModule = module.ActivateView();
-	}
+	// public void ActivateModule (ModuleControllerInterface module) {
+	// 	if(activeModule != null) {
+	// 		module.DeactivateView();
+	// 	}
+	// 	activeModule = module.ActivateView();
+	// }
 
-	public void AddCurrentActionToQueue () {
-		if(activeModule != null && activeModule.HasAction()) {
-			ship.actionQueue.Enqueue(activeModule.GetAction());
-		}
-	}
+	// public void AddCurrentActionToQueue () {
+	// 	if(activeModule != null && activeModule.HasAction()) {
+	// 		ship.actionQueue.Enqueue(activeModule.GetAction());
+	// 	}
+	// }
 
 	// Need a way for module sto hook onto ship behaviors, maybe use ship interface?
 	public void Reorient (Quaternion rotation, float rate) {

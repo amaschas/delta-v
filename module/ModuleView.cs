@@ -6,12 +6,16 @@ public class ModuleView : MonoBehaviour, ModuleActionInterface {
 	protected EventManager eventManager;
 
 	void Start () {
+		// Get module
+		module = gameObject.GetComponent<ModuleInterface>();
+
 		// Get module controller
 		moduleController = gameObject.GetComponent<ModuleControllerInterface>();
 
 		// Set up event listeners
 		moduleController.ModuleSelected += ActivateModuleView;
 		moduleController.ModuleDeselected += DeactivateModuleView;
+		DeactivateModuleView();
 	}
 
 	void ActivateModuleView () {
@@ -26,11 +30,14 @@ public class ModuleView : MonoBehaviour, ModuleActionInterface {
 
 	public event EventHandler<ModuleActionArgs> AddModuleAction;
 
-	protected virtual void OnAddModuleAction () { eventManager.RaiseEvent(AddModuleAction, GetModuleAction()); }
+	// This doesn't send the action because the module controller constructs the action
+	// The module view should send the UI input to the controller, which will store the settings in the module
+	// This only notifies the controller that it should create a module action from the current module state
+	protected virtual void OnAddModuleAction () { eventManager.RaiseEvent(AddModuleAction); }
 
-	public ModuleActionArgs GetModuleAction() {
-		return new ModuleActionArgs();
-	}
+	// public ModuleActionArgs GetModuleAction() {
+	// 	return new ModuleActionArgs();
+	// }
 
 	// Renders any global module UI elements
 	public void RenderGlobalModuleUI () {
