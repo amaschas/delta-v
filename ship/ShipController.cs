@@ -2,7 +2,13 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class ShipController : MonoBehaviour, ShipInterface {
+public class ShipController : MonoBehaviour, ShipControllerInterface {
+
+
+	/**
+	 * Class members
+	 * -------------
+	 */
 
 	// Ship data object
 	private Ship ship;
@@ -13,27 +19,24 @@ public class ShipController : MonoBehaviour, ShipInterface {
 	// Registry of modules via their interface
 	public Dictionary<string, ModuleControllerInterface> modules;
 
+	// Queued module actions
 	public OrderedDictionary<ModuleControllerInterface, ModuleActionArgs> moduleActions;
 
-	// The queue of module actions to execute
-	// TODO: most actions will not be sequential, so we really need a way to trigger events at x time, in parallel, for y duration, and for events to be linked
-	// public Queue<ModuleAction> actionQueue;
-
 	// The module action currently being edited in the GUI
-	// Should this belong to the ship data object?
-	// The principle being that the controller only handles data in a transient fashion?
 	public ModuleAction selectedModuleAction;
 
 	// The currently active module in the GUI
-	// TODO: can this just be an aspect of selectedModuleAction?
 	private ModuleControllerInterface activeModule = null;
 
-	//This should not exist
-	private OrientationController orientationController;
 
-    // void Start() { Init(); }
-    // void OnEnable() { Init(); }
+	/**
+	 * Monobehavior methods
+	 * --------------------
+	 */
 
+	/**
+	 * Monobehavior start
+	 */
 	public void Start () {
 		Debug.Log("Initializing " + transform.name);
 
@@ -56,7 +59,23 @@ public class ShipController : MonoBehaviour, ShipInterface {
 
 	}
 
-	private void InitModule( ModuleControllerInterface moduleController ) {
+	/**
+	 * Monobehavior update
+	 */
+	void Update () {
+		// Check the action queue
+	}
+
+
+	/**
+	 * Protected class members
+	 * -----------------------
+	 */
+
+	/**
+	 * Initialization functionality for modules on ship start
+	 */
+	protected void InitModule( ModuleControllerInterface moduleController ) {
 
 		// Add the module to the ship's module registry
 		ship.modules.Add(moduleController.Name(), moduleController);
@@ -65,73 +84,69 @@ public class ShipController : MonoBehaviour, ShipInterface {
 		moduleController.NewModuleAction += AddNewModuleAction;
 	}
 
-	public void AddNewModuleAction(object sender, ModuleActionArgs args) {
+	/**
+	 * Adds a new module action in the appropriate place in the queue
+	 */
+	protected void AddNewModuleAction(object sender, ModuleActionArgs args) {
 
 		// Add action to timeline
 		// This needs to insert the action based on the time offset of the action
 		moduleActions.Add(sender, args);
 	}
 
+
+	/**
+	 * Public interface methods
+	 * ------------------------
+	 */
+
+	/**
+	 * Gets the ship name
+	 */
 	public string Name () {
 		return transform.name;
 	}
 
-	// void Update () {
-
-	// }
-
-	// Each update, message all relevant modules on that frame to complete one discrete action
-	void FixedUpdate () {
-		// This should listen to an GameController event
-		// I wonder if this even needs to be in fixedupdate, given that the actions themselves play in an update
-		// Literally the shipcontroller could send the start event, the individual ships should start the first action in the queue,
-		// When the actions finishes, it messages the shipcontroller, and the shipcontroller starts the next event
-		// The only update stuff happens in the modules
-		// if(ship.runQueue && GameObject.Find("GameController").GetComponent<GameController>().turnPlaying) {
-		// 	RunQueue();
-		// }
-	}
-
+	/**
+	 * Enables the ship GUI
+	 */
 	public void Select () {
 		shipView.enabled = true;
 		// orientationController.ActivateView();
 	}
 
+	/**
+	 * Disables the ship GUI
+	 */
 	public void Deselect () {
 		shipView.enabled = false;
-		// orientationController.DeactivateView();
-		// if(activeModule != null) {
-		// 	activeModule.DeactivateView();
-		// }
 	}
 
-	// public void ActivateModule (ModuleControllerInterface module) {
-	// 	if(activeModule != null) {
-	// 		module.DeactivateView();
-	// 	}
-	// 	activeModule = module.ActivateView();
-	// }
-
-	// public void AddCurrentActionToQueue () {
-	// 	if(activeModule != null && activeModule.HasAction()) {
-	// 		ship.actionQueue.Enqueue(activeModule.GetAction());
-	// 	}
-	// }
-
-	// Need a way for module sto hook onto ship behaviors, maybe use ship interface?
+	/**
+	 * Reorients the ship model
+	 */
 	public void Reorient (Quaternion rotation, float rate) {
 		// Debug.Log(Quaternion.Angle(transform.rotation, lookRotation));
 		transform.rotation = Quaternion.RotateTowards(transform.rotation, rotation, Time.deltaTime * rate);
 	}
 
+	/**
+	 * Adds thrust to the ship rigidbody
+	 */
 	public void AddThrust (int thrust) {
 		rigidbody.AddForce(transform.forward * thrust, ForceMode.Impulse);
 	}
 
+	/**
+	 * Gets the ship velocity
+	 */
 	public Vector3 GetVelocity () {
 		return transform.position + rigidbody.velocity * 10;
 	}
 
+	/**
+	 * Gets the ship transform position
+	 */
 	public Vector3 GetTransformPosition () {
 		return transform.position;
 	}

@@ -35,10 +35,6 @@ public class ModuleView : MonoBehaviour, ModuleActionInterface {
 	// This only notifies the controller that it should create a module action from the current module state
 	protected virtual void OnAddModuleAction () { eventManager.RaiseEvent(AddModuleAction); }
 
-	// public ModuleActionArgs GetModuleAction() {
-	// 	return new ModuleActionArgs();
-	// }
-
 	// Renders any global module UI elements
 	public void RenderGlobalModuleUI () {
     if(GUI.Button(new Rect(Screen.width - 105, Screen.height - 50, 100, 20), "Add Action")) {

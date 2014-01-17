@@ -6,7 +6,7 @@ public class GameController : MonoBehaviour {
 
   public bool turnPlaying = false;
   private ShipController selected;
-  public Dictionary<string, ShipInterface> ships = new Dictionary<string, ShipInterface>();
+  public Dictionary<string, ShipControllerInterface> ships = new Dictionary<string, ShipControllerInterface>();
   // public List<GameObject> ships = new List<GameObject>();
 
   public void Start () {
@@ -18,7 +18,7 @@ public class GameController : MonoBehaviour {
     // Check garbage collection
     GameObject[] shipObjects = GameObject.FindGameObjectsWithTag("Ship");
     foreach(GameObject ship in shipObjects) {
-      ShipInterface controller = ship.GetComponent(typeof(ShipInterface)) as ShipInterface;
+      ShipControllerInterface controller = ship.GetComponent(typeof(ShipControllerInterface)) as ShipControllerInterface;
       ships.Add(ship.name, controller);
     }
   }

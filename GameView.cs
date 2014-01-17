@@ -31,7 +31,7 @@ public class GameView : MonoBehaviour {
       // gameController.SendMessage("RunQueue"); <- doesn't work
       // Maybe trigger the queues by unfreezing the objects?
       Time.timeScale = 1;
-      foreach(KeyValuePair<string, ShipInterface> pair in gameController.ships) {
+      foreach(KeyValuePair<string, ShipControllerInterface> pair in gameController.ships) {
         pair.Value.RunQueue();
       }
       gameController.turnPlaying = true;
@@ -49,7 +49,7 @@ public class GameView : MonoBehaviour {
       }
     }
     int i = 0;
-    foreach(KeyValuePair<string, ShipInterface> pair in gameController.ships) {
+    foreach(KeyValuePair<string, ShipControllerInterface> pair in gameController.ships) {
       linePoints[i] = pair.Value.GetTransformPosition();
       // velocityIndicator.minDrawIndex = i;
       i++;
