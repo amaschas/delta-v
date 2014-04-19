@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class GameController : MonoBehaviour {
 
   public bool turnPlaying = false;
-  private ShipController selected;
+  private ShipControllerInterface selected;
   public Dictionary<string, ShipControllerInterface> ships = new Dictionary<string, ShipControllerInterface>();
   // public List<GameObject> ships = new List<GameObject>();
 
@@ -28,7 +28,7 @@ public class GameController : MonoBehaviour {
 		if(selected) {
       selected.Deselect();
     }
-    selected = UISelected.GetComponent<ShipController>();
+    selected = UISelected.GetComponent<ShipControllerInterface>();
 		selected.Select();
     Camera.main.GetComponent<MouseScrollPanZoom>().target = UISelected.transform;
 	}

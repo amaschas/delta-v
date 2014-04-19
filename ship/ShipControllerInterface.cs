@@ -12,14 +12,11 @@ public interface ShipControllerInterface {
   // Deactivates ship UI on mouse click off
   void Deselect ();
 
-  // Activates modules UI and inits or edits a module action
-  void ActivateModule (ModuleControllerInterface module);
-
   // re-orients the ship model
   void Reorient (Quaternion lookRotation, float rate);
 
   // adds thrust to the ship
-  void AddThrust (int thrust);
+  void AddThrust (object sender, ModuleActionArgs args);
 
   // Returns ship velocity
   Vector3 GetVelocity ();

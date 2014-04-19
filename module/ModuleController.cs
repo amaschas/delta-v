@@ -17,6 +17,8 @@ public class ModuleController : MonoBehaviour, ModuleControllerInterface {
 		return transform.name;
 	}
 
+	// public abstract void RegisterShip ( ShipControllerInterface ship );
+
 	public void SelectModule ( ModuleActionArgs args = ModuleActionArgs.Empty ) {
 		OnModuleSelected(args);
 	}

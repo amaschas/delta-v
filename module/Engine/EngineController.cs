@@ -2,28 +2,12 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class EngineController : MonoBehaviour, ModuleControllerInterface {
+public class EngineController : ModuleController {
 
-	// private Engine engine;
-	// private EngineView engineView;
+	// public event EventHandler<ModuleActionArgs> StartEngine;
 
-	// void Start () {
-	// 	engineView = gameObject.GetComponent<EngineView>();
-	// 	engine = gameObject.GetComponent<Engine>();
-	// 	engineView.enabled = false;
-	// }
-
-	// public string Name () {
-	// 	return transform.name;
-	// }
-
-	// public ModuleControllerInterface ActivateView () {
-	// 	engineView.enabled = true;
-	// 	return this;
-	// }
-
-	// public void DeactivateView () {
-	// 	engineView.enabled = false;
+	// public void RegisterShip ( ShipControllerInterface ship ) {
+	// 	StartEngine += ship.AddThrust();
 	// }
 
 	public void Run (ModuleAction action) {
@@ -33,7 +17,7 @@ public class EngineController : MonoBehaviour, ModuleControllerInterface {
 		// http://docs.unity3d.com/Documentation/ScriptReference/Time-fixedDeltaTime.html
 
 		// We need an event here, all modules need to be able to fire events back at the ship
-		transform.parent.gameObject.GetComponent<ShipController>().AddThrust(engine.thrust * time.deltaTime);
+		transform.parent.gameObject.GetComponent<ShipControllerInterface>().AddThrust(engine.thrust * time.deltaTime);
 	}
 	
 }

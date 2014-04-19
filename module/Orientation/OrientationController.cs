@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public class OrientationController : MonoBehaviour, ModuleControllerInterface {
+public class OrientationController : ModuleController {
 
 	public Orientation orientation;
 	private OrientationView orientationView;
@@ -75,7 +75,8 @@ public class OrientationController : MonoBehaviour, ModuleControllerInterface {
 			orientation.isRunning = true;
 		}
 		if(Quaternion.Angle(transform.parent.rotation, action.rotationTarget) > .1) {
-			transform.parent.gameObject.GetComponent<ShipController>().Reorient(action.rotationTarget, orientation.durationModifier);
+			// Should probably get this in start
+			transform.parent.gameObject.GetComponent<ShipControllerInterface>().Reorient(action.rotationTarget, orientation.durationModifier);
 		}
 		else {
 			orientation.isRunning = false;

@@ -11,22 +11,27 @@ public class ShipController : MonoBehaviour, ShipControllerInterface {
 	 */
 
 	// Ship data object
-	private Ship ship;
+	protected Ship ship;
 
 	// Ship view object
-	private ShipView shipView;
+	protected ShipView shipView;
+
+	// Do we need local references to all of these, or is it better to just refer to ship?
 
 	// Registry of modules via their interface
-	public Dictionary<string, ModuleControllerInterface> modules;
+	protected Dictionary<string, ModuleControllerInterface> modules;
 
 	// Queued module actions
-	public OrderedDictionary<ModuleControllerInterface, ModuleActionArgs> moduleActions;
+	protected OrderedDictionary<ModuleControllerInterface, ModuleActionArgs> moduleActions;
 
 	// The module action currently being edited in the GUI
-	public ModuleAction selectedModuleAction;
+	protected ModuleAction selectedModuleAction;
 
 	// The currently active module in the GUI
-	private ModuleControllerInterface activeModule = null;
+	protected ModuleControllerInterface selectedModule = null;
+
+	// The list of modules currently performing actions
+	protected List<ModuleControllerInterface> activeModules;
 
 
 	/**
@@ -37,7 +42,7 @@ public class ShipController : MonoBehaviour, ShipControllerInterface {
 	/**
 	 * Monobehavior start
 	 */
-	public void Start () {
+	void Start () {
 		Debug.Log("Initializing " + transform.name);
 
 		// Init ship data object
@@ -62,8 +67,8 @@ public class ShipController : MonoBehaviour, ShipControllerInterface {
 	/**
 	 * Monobehavior update
 	 */
-	void Update () {
-		// Check the action queue
+	void FixedUpdate () {
+		// Check the list of active modules and signal them to perform their actions
 	}
 
 
@@ -82,6 +87,9 @@ public class ShipController : MonoBehaviour, ShipControllerInterface {
 
 		// Connect ship to module events
 		moduleController.NewModuleAction += AddNewModuleAction;
+
+		// Send self to the module to init module side events
+		// moduleController.RegisterShip(this);
 	}
 
 	/**

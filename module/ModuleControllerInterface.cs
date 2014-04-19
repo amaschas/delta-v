@@ -5,8 +5,10 @@ public interface ModuleControllerInterface {
 
 	string Name ();
 
+	// void RegisterShip ();
+
   void SelectModule ();
-  void DeselectModule ()
+  void DeselectModule ();
 
   // Events
 	event EventHandler<ModuleActionArgs> NewModuleAction;

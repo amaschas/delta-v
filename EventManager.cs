@@ -1,10 +1,12 @@
 // using UnityEngine;
 using System.Collections;
 
+// Good use case for a global singleton here
+
 // Utility class for raising events
 public class EventManager {
 
-	// need an optional EventArgs derived param
+	// will EventArgs work here polymorphically?
 	public static void RaiseEvent ( EventHandler eventHandler, EventArgs args = EventArgs.Empty ) {
 
 		// Make a copy to be thread safe
